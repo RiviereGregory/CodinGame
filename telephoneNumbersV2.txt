@@ -1,0 +1,55 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		int n = in.nextInt();
+		ArrayList<String> number = new ArrayList<String>();
+		in.nextLine();
+		
+		for (int i = 0; i < n; i++) {
+			number.add( in.nextLine());
+			//System.out.println(number.get(i));
+		}
+		
+		Collections.sort(number);
+		
+		
+		int nbMin = nombreChiffre(number, n);
+	
+		System.out.println(nbMin);
+	}
+	
+	public static Integer nombreChiffre(List<String> list, int nbNumero){
+	    int nbMin = list.get(0).length();
+		int nbCommun = 0;
+		for (int i = 1; i < nbNumero; i++) {
+		    nbCommun = 0;
+		    if(list.get(i-1).length()<=list.get(i).length()){
+		        for(int j=0; j<list.get(i-1).length() ; j++){
+		            if(list.get(i-1).charAt(j) == list.get(i).charAt(j)){
+		                nbCommun++;
+		            }else {
+		                break;
+		            }
+		        }
+		    }else{
+		        for(int j=0; j<list.get(i).length() ; j++){
+		            if(list.get(i-1).charAt(j) == list.get(i).charAt(j)){
+		                nbCommun++;
+		            }else {
+		                break;
+		            }
+		        }
+		    }
+		    nbMin += (list.get(i).length()-nbCommun);
+		}
+		return nbMin;
+	}
+}

@@ -1,0 +1,154 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		int largeur = in.nextInt();
+		int hauteur = in.nextInt();
+		String line = in.nextLine();
+		line = in.nextLine();
+		//System.out.println(largeur);
+		//System.out.println(hauteur);
+		//System.out.println(line);
+		Character lettre[];
+		int nbLettre = line.length();
+		lettre = new Character[nbLettre];
+		
+		for (int i = 0; i < nbLettre; i++) {
+			lettre[i] = line.charAt(i);
+			//System.out.println(lettre[i]);
+		}
+		
+		String alphabet[][];
+		alphabet = new String[27][hauteur];
+		
+		for(int i=0; i<hauteur ; i++){
+		    line = in.nextLine();
+		    while(line.length() < (27*largeur)){
+		        line = line +" ";
+		    }
+		    for(int j = 0; j < 27 ; j++){
+		        String lettreArt = line.substring(j*largeur,j*largeur+largeur);
+		       
+		        alphabet[j][i] = lettreArt;
+		        
+		    }
+		    
+		}
+		
+		String mot[];
+		mot = new String[hauteur];
+		for(int j=0; j<hauteur; j++){
+		        mot[j] = "";
+		}
+		
+		for (int i = 0 ; i<nbLettre; i++){
+		    for(int j=0; j<hauteur; j++){
+		        mot[j] += codeAscii(alphabet,lettre[i],j);
+		    }
+		}
+		
+	    for(int k = 0; k<hauteur;k++){
+		        System.out.println( mot[k]); 
+		    }
+		
+	}
+	
+	
+	public static String codeAscii(String alphabet[][], Character lettre, int h){
+	    switch(lettre){
+	        case 'a':
+	        case 'A':
+	            return alphabet[0][h];
+	        case 'b':
+	        case 'B':
+	            return alphabet[1][h];
+    	    case 'c':
+	        case 'C':
+	            return alphabet[2][h];
+	        case 'd':
+	        case 'D':
+	            return alphabet[3][h];
+	            
+	        case 'E':
+	        case 'e':
+	            return alphabet[4][h];
+	        case 'f':
+	        case 'F':
+	            return alphabet[5][h];
+	        case 'g':
+	        case 'G':
+	            return alphabet[6][h];
+	       case 'h':
+	        case 'H':
+	            return alphabet[7][h];
+	        case 'i':
+	        case 'I':
+	            return alphabet[8][h];
+    	    case 'j':
+	        case 'J':
+	            return alphabet[9][h];
+	        case 'k':
+	        case 'K':
+	            return alphabet[10][h];
+	        case 'l':
+	        case 'L':
+	            return alphabet[11][h];
+	        case 'm':
+	        case 'M':
+	            return alphabet[12][h];
+	       
+	       case 'n':
+	        case 'N':
+	            return alphabet[13][h];
+	        case 'o':
+	        case 'O':
+	            return alphabet[14][h];
+    	    case 'p':
+	        case 'P':
+	            return alphabet[15][h];
+	        case 'q':
+	        case 'Q':
+	            return alphabet[16][h];
+	            
+	        case 'r':
+	        case 'R':
+	            return alphabet[17][h];
+	        case 's':
+	        case 'S':
+	            return alphabet[18][h];
+	        case 't':
+	        case 'T':
+	            return alphabet[19][h];
+	       case 'u':
+	        case 'U':
+	            return alphabet[20][h];
+	        case 'v':
+	        case 'V':
+	            return alphabet[21][h];
+    	    case 'w':
+	        case 'W':
+	            return alphabet[22][h];
+	        case 'x':
+	        case 'X':
+	            return alphabet[23][h];
+	            
+	        case 'y':
+	        case 'Y':
+	            return alphabet[24][h];
+	        case 'z':
+	        case 'Z':
+	            return alphabet[25][h];
+	       
+	       default:
+	        return alphabet[26][h];
+	        
+	    }
+	}
+}

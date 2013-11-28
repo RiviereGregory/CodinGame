@@ -1,0 +1,58 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+        String line = "";
+        Integer n = null;
+        Integer nombreChevaux = null;
+        Boolean conditionNombre = false;
+        while(!conditionNombre){
+            line = in.nextLine();
+            n = Integer.valueOf(line);
+            if(n>0 && n<10000){
+                nombreChevaux = n;
+                conditionNombre = true;
+            }else if(n>10000){
+                nombreChevaux=10000;
+               conditionNombre = true;
+            }else{
+               conditionNombre = false;
+            }
+        }
+        //System.out.println(n);
+        Integer[] puissance = new Integer[nombreChevaux];
+    
+        int compteur = 0;
+        for(int i = 0; i<n ; i++){
+            if(i==0){
+                compteur = 0;
+            }
+            line = in.nextLine();
+            Integer p = Integer.valueOf(line);
+            if(p<1000001){
+                //System.out.println(compteur);
+               
+                puissance[compteur] = p; 
+                compteur++;
+            }
+            // System.out.println(p);
+            //System.out.println(compteur);
+        }
+        
+        Integer diffMin = null;
+        diffMin = Math.abs(puissance[1] - puissance[0]);
+        for(int i = 0; i<compteur; i++){
+            for(int j = i+1 ; j<compteur-1 ; j++){
+                if(Math.abs(puissance[j] - puissance[i]) < diffMin){
+                    diffMin = Math.abs(puissance[j] - puissance[i]);
+                }
+            }
+        }        
+        System.out.println(diffMin);
+        
+	}
+}

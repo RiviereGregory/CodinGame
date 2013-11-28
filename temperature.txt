@@ -1,0 +1,38 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		int n = in.nextInt();
+		Integer temperature[] = new Integer[n];
+		
+		for (int i = 0; i < n; i++) {
+			temperature[i] = in.nextInt();
+			//System.out.println(temperature[i]);
+		}
+	    int min = 1000;
+		for (int i = 0; i < n; i++) {
+		    if(Math.abs(min) == Math.abs(temperature[i])){
+		        if(min<temperature[i]){
+		         min = temperature[i];
+		        }
+		    }else if(Math.abs(min) > Math.abs(temperature[i])){
+		        
+		         min = temperature[i];
+		        
+		    }
+		}
+		if(min==1000){
+		    System.out.println("0");
+		}else{
+		    System.out.println(min);
+		}
+		
+	}
+}

@@ -1,0 +1,193 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		int ligne = in.nextInt();
+		int colonne = in.nextInt();
+		String line = in.nextLine();;
+		Character[][] carte;
+		int coordX=0;
+		int coordY=0;
+		int teleport[][] = new int[2][2];
+		int telportnb = 0;
+		carte = new Character[ligne][colonne];
+		for(int i=0; i<ligne ; i++){
+		    line = in.nextLine();
+		    //System.out.println(line);
+		    //System.out.println(line.length());
+		    for(int j=0; j<colonne; j++){
+		        
+		        carte[i][j] = line.charAt(j);
+		        if(carte[i][j].equals('@')){
+		            coordX = i;
+		            coordY = j;
+		        }
+		        if(carte[i][j].equals('T') && telportnb == 0){
+		            teleport[0][0] = i;
+		            teleport[0][1] = j;
+		            telportnb = 1;
+		        }else  if(carte[i][j].equals('T') && telportnb == 1){
+		            teleport[1][0] = i;
+		            teleport[1][1] = j;
+		        }
+		        //System.out.print(carte[i][j]);
+		    }
+		    //System.out.println();
+		}
+		char position = carte[coordX][coordY];
+		int etatOrientation = 0;
+		int modeCasseur = 0;
+		while(true){
+		    Character sud = carte[coordX+1][coordY];
+		    Character est = carte[coordX][coordY+1];
+		    Character nord = carte[coordX-1][coordY];
+		    Character ouest = carte[coordX][coordY-1];
+		    
+		    switch(etatOrientation){
+		        case 0:
+		            if(modeCasseur==0){
+		                 if(!(sud.equals('#') || sud.equals('X'))){
+            		       System.out.println("SOUTH");
+            		       coordX += 1;
+            		       etatOrientation = 0;
+            		    }else  if(!(est.equals('#') || est.equals('X') )){
+            		       System.out.println("EAST");
+            		       coordY += 1;
+            		       etatOrientation = 1;
+            		   }else  if(!(nord.equals('#') || nord.equals('X') )){
+            		       System.out.println("NORTH");
+            		       coordX -= 1;
+            		       etatOrientation = 2;
+            		   }else  if(!(ouest.equals('#') || ouest.equals('X'))){
+            		       System.out.println("WEST");
+            		       coordY -= 1;
+            		       etatOrientation = 3;
+            		   }
+		            }else if(modeCasseur==1){
+		                 if(!(sud.equals('#'))){
+            		       System.out.println("SOUTH");
+            		       coordX += 1;
+            		       etatOrientation = 0;
+            		    }else  if(!(est.equals('#') )){
+            		       System.out.println("EAST");
+            		       coordY += 1;
+            		       etatOrientation = 1;
+            		   }else  if(!(nord.equals('#'))){
+            		       System.out.println("NORTH");
+            		       coordX -= 1;
+            		       etatOrientation = 2;
+            		   }else  if(!(ouest.equals('#'))){
+            		       System.out.println("WEST");
+            		       coordY -= 1;
+            		       etatOrientation = 3;
+            		   }
+		            }
+		            break;
+		        case 1:
+		            if(modeCasseur==0){
+		                if(!(est.equals('#') || est.equals('X') )){
+            		       System.out.println("EAST");
+            		       coordY += 1;
+            		       etatOrientation = 1;
+            		   }else {
+            		       etatOrientation=0;
+            		   }
+		            }else if(modeCasseur==1){
+		                if(!(est.equals('#'))){
+            		       System.out.println("EAST");
+            		       coordY += 1;
+            		       etatOrientation = 1;
+            		   }else {
+            		       etatOrientation=0;
+            		   }
+		            }
+		            break;
+		        case 2:
+		            if(modeCasseur==0){
+		                if(!(nord.equals('#') || nord.equals('X') )){
+            		       System.out.println("NORTH");
+            		       coordX -= 1;
+            		       etatOrientation = 2;
+            		   }else { 
+            		       etatOrientation = 0;
+            		   }
+		            }else if(modeCasseur==1){
+		                if(!(nord.equals('#') )){
+            		       System.out.println("NORTH");
+            		       coordX -= 1;
+            		       etatOrientation = 2;
+            		   }else { 
+            		       etatOrientation = 0;
+            		   }
+		            }
+		            break;
+		        case 3:
+		            if(modeCasseur==0){
+		                if(!(ouest.equals('#') || ouest.equals('X'))){
+            		       System.out.println("WEST");
+            		       coordY -= 1;
+            		       etatOrientation = 3;
+            		   }else {
+            		       etatOrientation = 0;
+            		   }
+		            }else if(modeCasseur==1){
+		                if(!(ouest.equals('#'))){
+            		       System.out.println("WEST");
+            		       coordY -= 1;
+            		       etatOrientation = 3;
+            		   }else {
+            		       etatOrientation = 0;
+            		   }
+		            }
+		            break;
+		      default :
+		      break;
+		}
+		
+		    if(carte[coordX][coordY].equals('T')){
+		        
+		       if(teleport[0][0]==coordX && teleport[0][1]==coordY){
+		           coordX = teleport[1][0];
+		           coordY = teleport[1][1];
+		       }else {
+		           coordX = teleport[0][0];
+		           coordY = teleport[0][1];
+		       }
+		       //System.out.println(coordX +" - " + coordY);
+		   }
+		    if(carte[coordX][coordY].equals('B') && modeCasseur == 0){
+		       modeCasseur = 1;
+		   }else if(carte[coordX][coordY].equals('B') && modeCasseur == 1){
+		       modeCasseur = 0;
+		   }
+		   if(carte[coordX][coordY].equals('X') && modeCasseur == 1){
+		       carte[coordX][coordY] = ' ';
+		   } 
+		   if(carte[coordX][coordY].equals('S')){
+		       etatOrientation = 0;
+		   }
+		    if(carte[coordX][coordY].equals('N')){
+		       etatOrientation = 2;
+		   }
+		   if(carte[coordX][coordY].equals('E')){
+		       etatOrientation = 1;
+		   }
+		   if(carte[coordX][coordY].equals('W')){
+		       etatOrientation = 3;
+		   }
+		   if(carte[coordX][coordY].equals('$')){
+		       break;
+		   }
+		}
+		//System.out.println(ligne);
+		//System.out.println(colonne);
+		
+	}
+}

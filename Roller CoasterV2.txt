@@ -1,0 +1,61 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		int nbPlaces = in.nextInt();
+		if(nbPlaces>1000000000){
+		    nbPlaces = 1000000000;
+		}
+		int nbTour = in.nextInt();
+		if(nbTour>100000000){
+		    nbTour = 100000000;
+		}
+		int nbGroup = in.nextInt();
+		if(nbGroup>10000){
+		    nbGroup = 10000;
+		}
+		Integer group[];
+		group = new Integer[nbGroup];
+		
+		for (int i = 0; i < nbGroup; i++) {
+			group[i] = in.nextInt();
+			if(group[i] > nbPlaces){
+			    group[i] = nbPlaces;
+			}
+		}
+		
+		long recette = calculRecette(group,nbTour, nbPlaces);
+		
+		System.out.println(recette);
+	}
+	
+	public static long calculRecette(Integer group[],int nbTour,int nbPlaces){
+	    long recette = 0L;
+		int numeroGroup = 0;
+		int nbGroup = group.length;
+		for (int i = 0; i < nbTour; i++) {
+			int nbPlacesVide = nbPlaces;
+			int tousWagon = 0;
+			while(nbPlacesVide >= group[numeroGroup]){
+			    tousWagon++;
+			    if(tousWagon>nbGroup){
+			        break;
+			    }
+			    recette += group[numeroGroup];
+			    nbPlacesVide -= group[numeroGroup];
+			    numeroGroup++;
+			    if(numeroGroup>=nbGroup){
+			        numeroGroup = 0;
+			    }
+			}
+		}
+		return recette;
+	}
+}

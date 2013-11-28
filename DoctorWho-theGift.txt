@@ -1,0 +1,50 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		int nbPerson = in.nextInt();
+		int montantCadeau = in.nextInt();
+		
+		ArrayList<Integer> participant = new ArrayList<>();
+		ArrayList<Integer> participantSomme = new ArrayList<>();
+		
+		int sommeTotale = 0;
+		for (int i = 0; i < nbPerson; i++) {
+		    int montant = in.nextInt();
+		    participant.add(montant);
+		    sommeTotale += montant;
+		}
+		
+		Collections.sort(participant);
+		
+		if(sommeTotale<montantCadeau){
+		    System.out.println("IMPOSSIBLE");
+		}else {
+		    int reste = montantCadeau;
+		    
+		    for (int i = 0; i < nbPerson; i++) {
+		        int part = reste/(nbPerson-i);
+		        if(participant.get(i)<part){
+		            participantSomme.add(participant.get(i));
+		            reste -= participant.get(i);
+		        }else{
+		            participantSomme.add(part);
+		            reste -= part;
+		        }
+		    
+		    }
+		    for (int i = 0; i < nbPerson; i++) {
+		        System.out.println(participantSomme.get(i));
+		    }
+		}
+		
+	}
+
+}

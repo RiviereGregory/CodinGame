@@ -1,0 +1,55 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+    public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		int n = in.nextInt();
+        List<Integer> x = new ArrayList<>();
+        List<Integer> y = new ArrayList<>();
+		
+		for (int i = 0; i < n; ++i) {
+			x.add(in.nextInt());
+			y.add(in.nextInt());
+		}
+		int minX = Collections.min(x);
+        
+        int maxX = Collections.max(x);
+        
+		Collections.sort(y);
+        
+        int mediane = median(y);
+        
+        Long longueur = longueurTotale(y,mediane,maxX,minX);
+        
+        System.out.println(longueur);
+        
+	}
+    
+     public static long longueurTotale(List<Integer> y, Integer mediane, Integer maxX,Integer minX ) {
+         long longueurT = 0l;
+         long longueur = 0l;
+         for(int i=0; i<y.size() ; i++){
+             longueur =  Math.abs(y.get(i).intValue()-mediane.intValue());
+             longueurT = longueurT+ longueur;             
+         }
+         
+         longueurT = longueurT + Math.abs(maxX-minX);
+                 
+         return longueurT;
+    }
+    
+    public static int median(List<Integer> m) {
+    int middle = m.size()/2;
+    if (m.size()%2 == 1) {
+        return m.get(middle);
+    } else {
+        return (m.get(middle-1) + m.get(middle)) / 2;
+    }
+}
+}

@@ -1,0 +1,79 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		String line = in.nextLine();
+		int count = 0;
+		char premier=' ';
+		for (int i = 0; i < line.length(); i++) {
+			String code = returnASCII(line.charAt(i));
+			
+			for (int j = 0; j < code.length(); j++) {
+			    if(code.charAt(j)=='0'){
+			        //System.out.println("dans 0");
+			        if (code.charAt(j)==premier){
+			            count++;
+			        }else {
+			            if(count > 0){
+			                System.out.print("0 ");
+			                for(int nbC = 0; nbC < count ; nbC++){
+			                    System.out.print("0");
+			                }
+			                System.out.print(" ");
+			            }
+			            premier = '0';
+			            count = 1;
+			        }
+			        
+			    }else if(code.charAt(j)=='1'){
+			        //System.out.println("dans 1");
+			        if (code.charAt(j)==premier){
+			            count++;
+			        }else {
+			            if(count > 0){
+			                System.out.print("00 ");
+			                for(int nbC = 0; nbC < count ; nbC++){
+			                    System.out.print("0");
+			                }
+			                System.out.print(" ");
+			            }
+			            premier = '1';
+			            count = 1;
+			        }
+			    }
+			}
+			
+		}
+		if(count > 0){
+		    if(premier == '0'){
+                System.out.print("00 ");
+		    }else  if(premier =='1'){
+                System.out.print("0 ");
+		    }
+            for(int nbC = 0; nbC < count ; nbC++){
+                System.out.print("0");
+            }
+		}
+
+	}
+	
+
+	public static String returnASCII(char caractere){
+	    StringBuilder binary = new StringBuilder();
+	    int valeurInt = (int)caractere;
+		String binaryString = Integer.toBinaryString(valeurInt);
+		for (int i=binaryString.length(); i < 7;i++) {
+			binary.append("0");
+		}
+		binary.append(binaryString);
+		return binary.toString();
+	}
+	
+}

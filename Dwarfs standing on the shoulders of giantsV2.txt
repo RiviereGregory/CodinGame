@@ -1,0 +1,67 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		int n = in.nextInt();
+		List<Integer> number[] ;
+		int compteur = 0;
+		number = new ArrayList[n];
+		
+		number[compteur] = new ArrayList<Integer>();
+		number[compteur].add(in.nextInt());
+		number[compteur].add(in.nextInt());
+
+		for (int i = 1; i < n; i++) {
+		    int nb1 = in.nextInt();
+		    int nb2 = in.nextInt();
+		    int addOk = 0;
+		    
+		    listPossibilite(number, nb1, nb2, addOk, compteur);
+		    
+		    if( addOk == 0){
+		        compteur++;
+		        number[compteur] = new ArrayList<Integer>();
+		        number[compteur].add(nb1);
+		        number[compteur].add(nb2);
+		    }
+		    
+		    
+		    
+		}
+		int sizeMax = 0;
+		for (int j=0 ; j<=compteur; j++){
+		    if(sizeMax < number[j].size()){
+		        sizeMax = number[j].size();
+		    }
+		    
+		   /* System.out.println();
+		    for(int i=0; i<number[j].size() ; i++){
+		        System.out.println(number[j].get(i));
+		    }
+		    System.out.println();*/
+		}
+		
+		System.out.println(sizeMax);
+		
+	}
+	
+	public static void listPossibilite(List<Integer> number[], int nb1, int nb2, int addOk, int compteur){
+	    
+		    for (int j=0 ; j<=compteur; j++){
+		        if(number[j].indexOf(nb2) == 0){
+		            number[j].add(0,nb1);
+		            addOk = 1;
+		        }else if(number[j].indexOf(nb1) == (number[j].size()-1)){
+		            number[j].add(nb2);
+		             addOk = 1;
+		        }
+		    }
+	}
+}

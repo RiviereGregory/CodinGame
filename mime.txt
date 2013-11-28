@@ -1,0 +1,66 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		String line = in.nextLine();
+		Integer nbType=Integer.valueOf(line);
+		line = in.nextLine();
+		Integer nbNom=Integer.valueOf(line);
+		HashMap<String,String> typeExtension = new HashMap<>();
+		for(int i=0; i<nbType ; i++){
+		    line = in.nextLine();
+		    String[] lineSplit = line.split(" ");
+		    
+		    typeExtension.put(lineSplit[0], lineSplit[1]);
+		}
+		
+		Set<String> keySet = typeExtension.keySet();
+/*
+		for (String valeur : keySet) {
+			// Affiche la personne
+			System.out.println(valeur);
+			System.out.println(" - " +typeExtension.get(valeur));
+		}
+*/		
+    	for(int i=0; i<nbNom ; i++){
+		    line = in.nextLine();
+		    List<String> list = new ArrayList<>();
+		    String premier= line.substring(0,1);
+		    String dernier= line.substring(line.length()-1,line.length());
+		    if(premier.equals(".")){
+		        list.add(".");
+		        //System.out.println("dans substring");
+		    }
+		     if(dernier.equals(".")){
+		        list.add(".");
+		        list.add(".");
+		        list.add(".");
+		        //System.out.println("dans substring");
+		    }
+		    StringTokenizer st = new StringTokenizer(line,".");
+             while (st.hasMoreTokens()) {
+                 list.add(st.nextToken());
+             }
+            if(list.size()==2){
+                if(typeExtension.get(list.get(1).toLowerCase())==null){
+                    if(typeExtension.get(list.get(1).toUpperCase())==null){
+                        System.out.println("UNKNOWN");
+                    }else {
+                        System.out.println(typeExtension.get(list.get(1).toUpperCase()));
+                    }
+                }else {
+                    System.out.println(typeExtension.get(list.get(1).toLowerCase()));
+                }
+            }else {
+                    System.out.println("UNKNOWN");
+            }
+		}
+	}
+}
