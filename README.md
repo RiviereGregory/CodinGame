@@ -2,6 +2,7 @@ Programme fait sur CodinGame
 =============================
 --------------------------------------
 **Facile**
+
 1. **ASCII Art** 
 2. **Temperatures** 
 3. **Chuck Norris** 
@@ -10,6 +11,7 @@ Programme fait sur CodinGame
 
 --------------------------------------- 
 **Moyen**
+
 6. **Stock Exchange Losses** 
 7. **Network Cabling** 
 8. **Telephone Numbers** 
@@ -19,4 +21,5 @@ Programme fait sur CodinGame
 
 --------------------------------------- 
 **Difficile**
+
 12. **Roller Coaster** 
