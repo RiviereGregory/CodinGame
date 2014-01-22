@@ -1,0 +1,50 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+	    Scanner in = new Scanner(System.in);
+		double longitudePos = Double.valueOf(in.nextLine().replaceAll(",","\\."));
+		double latitudePos = Double.valueOf(in.nextLine().replaceAll(",","\\."));
+		double longitudePosRad = longitudePos*Math.PI/180;
+		double latitudePosRad = latitudePos*Math.PI/180;
+		int n = Integer.parseInt(in.nextLine());
+		String nomPositionDefib = "";
+		double distanceMin = 100000;
+		for (int i = 0; i < n; i++) {
+		    String line = in.nextLine();
+		    String[] lineSplit = line.split(";");
+		    double longitudePosDefib = Double.valueOf(lineSplit[4].replaceAll(",","\\."));
+		    double latitudePosDefib = Double.valueOf(lineSplit[5].replaceAll(",","\\."));
+		    
+		    
+		    double longitudePosDefibRad = longitudePosDefib*Math.PI/180;
+		    double latitudePosDefibRad = latitudePosDefib*Math.PI/180;
+		    double distanceDefib = distance(longitudePosRad,longitudePosDefibRad,latitudePosRad,latitudePosDefibRad);
+		    
+		    if(distanceDefib < distanceMin){
+		        distanceMin = distanceDefib;
+		        nomPositionDefib = lineSplit[1];
+		    }
+		    
+			
+		}
+		System.out.println(nomPositionDefib);
+	}
+	public static double X(double longitudeA,double longitudeB,double latitudeA,double latitudeB){
+	    return (longitudeB-longitudeA)*Math.cos((latitudeA+latitudeB)/2);
+	}
+	
+	public static double Y(double latitudeA,double latitudeB){
+	    return (latitudeB-latitudeA);
+	}
+	
+	public static double distance(double longitudeA,double longitudeB,double latitudeA,double latitudeB){
+	    return (Math.sqrt(X(longitudeA,longitudeB,latitudeA,latitudeB)*X(longitudeA,longitudeB,latitudeA,latitudeB) 
+	        + Y(latitudeA,latitudeB)*Y(latitudeA,latitudeB)) * 6371);
+	}
+	
+	
+}
