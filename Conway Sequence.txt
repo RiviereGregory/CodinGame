@@ -1,0 +1,63 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		int origineSerie = in.nextInt();
+		int ligne = in.nextInt();
+		
+		System.out.println(elementSerie(origineSerie, ligne));
+		
+	}
+	
+	public static String elementSerie(int origineSerie, int ligne){
+	    String origine = "";
+	    if (ligne == 1){
+	        origine = "" + origineSerie;
+	    }else {
+	        origine = "1 " + origineSerie;
+	    }
+	    
+	    
+	    for(int i=3; i<ligne+1; i++){
+	        
+	        int nombreDeFois = 1;
+	        String[] origineSplit = origine.split(" ");
+	        String origineTemp = "";
+	        //System.out.println("ligne - " +i);
+	        //System.out.println("length - " + origineSplit.length);
+	        for(int j = 0 ; j < origineSplit.length ; j++){
+	            //System.out.println("char j - " + origineSplit[j]);
+	            //System.out.println("char  j-1 - " + origineSplit[j+1]);
+	            if((j+1)==origineSplit.length){
+	                //System.out.println("j+1");
+	                origineTemp += ""+nombreDeFois+" "+origineSplit[j] +" ";
+	            }else if(origineSplit[j].equalsIgnoreCase(origineSplit[j+1])){
+	                //System.out.println("égalité");
+	                nombreDeFois++;
+	                if((j+1)==origineSplit.length){
+	                    origineTemp += ""+nombreDeFois+" "+origineSplit[j]+" ";
+	                }
+	            }else{
+	                //System.out.println("pas égalité");
+	                 origineTemp += ""+nombreDeFois+" "+origineSplit[j]+" ";
+	                 nombreDeFois = 1;
+	                //System.out.println(" origine temp - " +origineTemp);
+	               /* if(j == origine.length()-1){
+	                    origineTemp += ""+nombreDeFois+origine.charAt(j);
+	                    //System.out.println(" origine temp - " +origineTemp);
+	                }*/
+	            }
+	            //System.out.println(" origine temp - " +origineTemp);
+	        }
+	        //System.out.println(" origine temp - " +origineTemp);
+	        origine = origineTemp.trim();
+	        
+	    }
+	    
+	    return origine;
+	}
+}

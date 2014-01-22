@@ -19,6 +19,7 @@ Programme fait sur CodinGame
 4. **Dwarfs standing on the shoulders of giants** 
 5. **Bender, a depressed robot**
 6. **Docteur Who - The Gift**
+7. **Conway Sequence**
 
 --------------------------------------- 
 **Difficile**
