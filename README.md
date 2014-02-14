@@ -9,6 +9,7 @@ Programme fait sur CodinGame
 4. **MIME Type** 
 5. **Horse-racing Duals** 
 6. **Defibrillators**
+7. **Mars Lander lvl 1**
 
 --------------------------------------- 
 **Moyen**
@@ -21,6 +22,7 @@ Programme fait sur CodinGame
 6. **Docteur Who - The Gift**
 7. **Conway Sequence**
 8. **Calcul Maya**
+9. **Mars Lander lvl 2**
 
 --------------------------------------- 
 **Difficile**
