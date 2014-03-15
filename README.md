@@ -10,6 +10,7 @@ Programme fait sur CodinGame
 5. **Horse-racing Duals** 
 6. **Defibrillators**
 7. **Mars Lander lvl 1**
+8. **Ragnarök - Le pouvoir de Thor**
 
 --------------------------------------- 
 **Moyen**
