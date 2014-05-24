@@ -11,6 +11,7 @@ Programme fait sur CodinGame
 6. **Defibrillators**
 7. **Mars Lander lvl 1**
 8. **Ragnarök - Le pouvoir de Thor**
+9. **Skynet - Le Saut**
 
 --------------------------------------- 
 **Moyen**
@@ -24,6 +25,7 @@ Programme fait sur CodinGame
 7. **Conway Sequence**
 8. **Calcul Maya**
 9. **Mars Lander lvl 2**
+10. **Ragnarök - Thor contre les Géants**
 
 --------------------------------------- 
 **Difficile**

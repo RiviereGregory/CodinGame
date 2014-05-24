@@ -1,0 +1,80 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+
+        int longPont = in.nextInt();
+        int longGouffre = in.nextInt();
+        int longPlateforme = in.nextInt();
+        DonneeSaut donneeSaut = new DonneeSaut(longPont,longGouffre,longPlateforme);
+        // System.out.println(longPont +" - "+ longGouffre +" - "+ longPlateforme);
+        //System.out.println(factoriel(4));
+        while (true) {
+            // Read information from standard input
+            int vitesse = in.nextInt();
+            int position = in.nextInt();
+            
+            DonneeMoto donneeMoto = new DonneeMoto(vitesse,position);
+            //System.out.println(vitesse +" - "+ position );
+            String choix = choixAction(donneeSaut,donneeMoto);
+
+            // System.err.println("Debug messages...");
+
+            // Write action to standard output
+            System.out.println(choix);
+        }
+    }
+    
+    public static String choixAction(DonneeSaut donneeSaut, DonneeMoto donneeMoto){
+        if(donneeSaut.longPont > (donneeMoto.position + donneeMoto.vitesse - 1 )){
+            if (donneeSaut.longGouffre > (donneeMoto.vitesse - 1)){
+                return "SPEED";
+            }else if((donneeSaut.longPlateforme > (factoriel(donneeMoto.vitesse)))){
+                return "SPEED";
+            }else if((donneeSaut.longPlateforme < (factoriel(donneeMoto.vitesse)-1))){
+                return "SLOW";
+            }else{
+                return "WAIT";
+            }
+        }else if((donneeSaut.longPont + donneeSaut.longGouffre) < (donneeMoto.position)+1){
+            return "SLOW";
+        }else{
+            return "JUMP";
+        }
+        
+        //return "WAIT";
+    }
+    
+    public static int factoriel(int x){
+        if(x == 1){
+            return 1;
+        }
+        return (x + factoriel(x-1));
+    }
+    
+    
+}
+
+class DonneeMoto{
+    public int vitesse;
+    public int position;
+    DonneeMoto( int vitesse,int position){
+        this.vitesse = vitesse;
+        this.position = position;
+    }
+}
+    
+class DonneeSaut{
+    public int longPont;
+    public int longGouffre;
+    public int longPlateforme;
+    DonneeSaut( int pont,int gouffre,int plateforme){
+        longPont = pont;
+        longGouffre = gouffre;
+        longPlateforme = plateforme;
+    }
+}
