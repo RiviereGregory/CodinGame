@@ -1,0 +1,44 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int tour = 0;
+        while (true) {
+            System.err.println("tour"+tour);
+            int posX = in.nextInt();
+            int posY = in.nextInt();
+            System.err.println("posX "+posX);
+            System.err.println("posY "+posY);
+            Integer montagne[] = new Integer[8];
+            for(int i=0; i<8; i++){
+                montagne[i] = in.nextInt();
+                System.err.println("Montagne "+i+" : "+montagne[i]);
+            }
+            int maxM = plusGrand(montagne);
+            if(posX == maxM){
+               System.out.println("FIRE"); 
+            }else{
+                System.out.println("HOLD");
+            }
+            tour++;
+        }
+    }
+    
+    public static int plusGrand(Integer montagne[]){
+        int max = 0;
+        int numeroM = 0;
+        int sizeM = montagne.length;
+        for(int i=0; i<sizeM; i++){
+            if(montagne[i] > max){
+                max =  montagne[i];
+                numeroM = i;
+            }
+        }
+        System.err.println("Max "+max+" : "+numeroM);
+        return numeroM;
+    }
+}

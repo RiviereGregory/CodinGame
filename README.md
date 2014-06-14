@@ -13,6 +13,7 @@ Programme fait sur CodinGame
 8. **Ragnarök - Le pouvoir de Thor**
 9. **Skynet - Le Saut**
 10. **Skynet - Le Final - Niveau 1**
+11. **Kirk's Quest - La descente**
 
 --------------------------------------- 
 **Moyen**
@@ -26,7 +27,7 @@ Programme fait sur CodinGame
 7. **Conway Sequence**
 8. **Calcul Maya**
 9. **Mars Lander lvl 2**
-10. **Ragnarök - Thor contre les Géants**
+
 
 --------------------------------------- 
 **Difficile**
@@ -34,3 +35,4 @@ Programme fait sur CodinGame
 1. **Roller Coaster** 
 2. **Bender complexity**
 3. **Super Computer**
+4. **Ragnarök - Thor contre les Géants**
