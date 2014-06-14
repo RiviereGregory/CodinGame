@@ -1,0 +1,102 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int largeur = in.nextInt();
+        int hauteur = in.nextInt();
+        System.err.println("largeur : "+largeur);
+        System.err.println("hauteur : "+hauteur);
+        Integer tab[][] = new Integer[hauteur][largeur];
+        for(int i = 0; i<hauteur ; i++ ){
+            for(int j=0; j<largeur; j++){
+                tab[i][j] = in.nextInt();
+                System.err.println("tab : "+i+" - "+j+" : "+ tab[i][j]);
+            }
+        }
+        int sortie = in.nextInt();
+        System.err.println("sortie : "+sortie);
+        // Read init information from standard input, if any
+
+        while (true) {
+            // Read information from standard input
+            int posX = in.nextInt();
+            System.err.println("posX : "+posX);
+            int posY = in.nextInt();
+            System.err.println("posY : "+posY);
+            String sens = in.next();
+            System.err.println("sens : "+sens);
+
+            // Write action to standard output
+            chemin(tab,posX,posY,sens);
+        }
+    }
+    public static void chemin(Integer tab[][],int posX,int posY,String sens){
+        int largeur = tab[0].length;
+        int hauteur = tab.length;
+        int type = tab[posY][posX];
+        Integer out[] = new Integer[2];
+        sortieIndy(type,posX,posY,sens,out);
+        System.out.println(out[0] + " "+out[1]);
+    }
+    public static void sortieIndy(int type,int posX,int posY,String sens,Integer out[]){
+       switch(type){
+            case 0 :
+                out[0] = null;
+                out[1] = null;
+               break;
+            case 1 :
+            case 3 :
+            case 7 :
+            case 8 :
+            case 9 :
+            case 12 :
+            case 13 :
+                out[0] = posX;
+                out[1] = posY+1;
+               break;
+            case 2 :
+            case 6:
+                if("LEFT".equalsIgnoreCase(sens)){
+                    out[0] = posX+1;
+                    out[1] = posY;
+                }
+                if("RIGHT".equalsIgnoreCase(sens)){
+                    out[0] = posX-1;
+                    out[1] = posY;
+                }
+               break;
+            case 4 :
+                if("TOP".equalsIgnoreCase(sens)){
+                    out[0] = posX-1;
+                    out[1] = posY;
+                }
+                if("RIGHT".equalsIgnoreCase(sens)){
+                    out[0] = posX;
+                    out[1] = posY+1;
+                }
+               break;   
+            case 5 :
+                if("TOP".equalsIgnoreCase(sens)){
+                    out[0] = posX+1;
+                    out[1] = posY;
+                }
+                if("LEFT".equalsIgnoreCase(sens)){
+                    out[0] = posX;
+                    out[1] = posY+1;
+                }
+               break; 
+            case 10 :
+                out[0] = posX-1;
+                out[1] = posY;
+               break;
+            case 11 :
+                out[0] = posX+1;
+                out[1] = posY;
+               break;
+       }
+    }
+}
