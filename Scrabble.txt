@@ -1,0 +1,97 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		// Initialisation
+		int nbMot = in.nextInt();
+		int maxPoint = 0;
+		int indiceMot = 0;
+		String mots[ ]= new String[nbMot];
+		System.err.println("nbMot : "+nbMot);
+		for (int i = 0; i < nbMot; i++) {
+			mots[i] = in.next();
+		}
+		String lettreAutorise = in.next();
+		System.err.println("lettreAutorise : "+lettreAutorise);
+		// recherche mot possible avec lettre autorisé
+		// Calcul point max pour chaque mot possible
+		for (int i = 0; i < nbMot; i++) {
+			String lettreA = lettreAutorise;
+			int point = 0;
+			String motAutorise = "";
+			for(int j=0; j< mots[i].length() ; j++){
+			    int index = lettreA.indexOf(mots[i].charAt(j));
+			    if(index<0){
+			        //System.err.println("index : "+index);
+			        motAutorise = "KO";
+			        break;
+			    }else{
+			        // Suppression des lettres utilisées
+			        String lettresTmp = lettreA.substring(0,index) + lettreA.substring(index +1);
+			        System.err.println("index : "+index);
+			        System.err.println("lettresTmp : "+lettresTmp);
+			        System.err.println("mots[i] : "+mots[i]);
+			        lettreA = lettresTmp;
+			    }
+			}
+			if(motAutorise != "KO"){
+			    for(int j=0; j< mots[i].length() ; j++){
+			    point += pointLettre(mots[i].charAt(j));
+    			}
+    			if(point > maxPoint){
+    			    maxPoint = point;
+    			    indiceMot = i;
+    			    System.err.println("maxPoint : "+maxPoint);
+    			    System.err.println("mots[i] : "+mots[i]);
+    			}
+			}
+		}
+		System.out.println(mots[indiceMot]);
+	}
+	
+	public static int pointLettre(char lettre){
+	    switch (lettre) {
+	        case 'e':
+	        case 'a':
+	        case 'i':
+	        case 'o':
+	        case 'n':
+	        case 'r':
+	        case 't':
+	        case 'l':
+	        case 's':
+	        case 'u':
+	            return 1;
+	        case 'd':
+	        case 'g':
+	            return 2;
+	        case 'b':
+	        case 'c':
+	        case 'm':
+	        case 'p':
+	            return 3;
+	        case 'f':
+	        case 'h':
+	        case 'v':
+	        case 'w':
+	        case 'y':
+	            return 4;
+	        case 'k':
+	            return 5;
+	        case 'j':
+	        case 'x':
+	            return 8;
+	        case 'q':
+	        case 'z':
+	            return 10;
+	    }
+	   return 0;
+	}
+}

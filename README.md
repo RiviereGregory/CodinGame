@@ -28,6 +28,7 @@ Programme fait sur CodinGame
 8. **Calcul Maya**
 9. **Mars Lander lvl 2**
 10. **Indiana - Niveau 1**
+11. **Scrabble (EN)**
 
 --------------------------------------- 
 **Difficile**
