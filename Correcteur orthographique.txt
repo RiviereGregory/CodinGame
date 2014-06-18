@@ -1,0 +1,316 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		String verbes[] = new String[6];
+		for (int i = 0; i < 6; i++) {
+			verbes[i] = in.next();
+			System.err.println("verbes[i] : " + verbes[i]);
+		}
+		int nbAdjectif = in.nextInt();
+		String adjectif[][] = new String[nbAdjectif][4];
+		for (int i = 0; i < nbAdjectif; i++) {
+			adjectif[i][0] = in.next();
+			adjectif[i][1] = in.next();
+			adjectif[i][2] = in.next();
+			adjectif[i][3] = in.next();
+			System.err.println("adjectif[i] : " + adjectif[i][0]+" "+adjectif[i][1]+" "+adjectif[i][2]+" "+adjectif[i][3]);
+		}
+		int nbNom = in.nextInt();
+		String noms[][] = new String[nbNom][3];
+		for (int i = 0; i < nbNom; i++) {
+			noms[i][0] = in.next();
+			noms[i][1] = in.next();
+			noms[i][2] = in.next();
+			System.err.println("noms[i] : " + noms[i][0]+" "+noms[i][1]+" "+noms[i][2]);
+		}
+		in.nextLine();
+		String phrase = in.nextLine();
+		System.err.println("phrase : " + phrase);
+		String[] splitPhrase = phrase.split(" ");
+		int valeurSujet = -1;
+		int valeurSujetArticle = -1;
+		int valeurNom = -1;
+		int valeurAdj = -1;
+		int posVerbe = -1;
+		int posArticle = -1;
+		int posAdjs[] = new int[nbAdjectif+5];
+		int posNoms[] = new int[nbNom+5];
+		String phraseCor ="";
+		int nNom = 0;
+		int nAdj = 0;
+		for (int i=0;i<splitPhrase.length ;i++ ) {
+		    for (int j = 0; j < 6; j++) {
+    			if(verbes[j].equalsIgnoreCase(splitPhrase[i])){
+    			    posVerbe = i;
+    			    System.err.println("posVerbe : " + posVerbe);
+    			}
+    			
+		    }
+		    for (int j = 0; j < nbNom; j++) {
+    			if( noms[j][1].equalsIgnoreCase(splitPhrase[i])||
+        			noms[j][2].equalsIgnoreCase(splitPhrase[i])) {
+        			    posNoms[nNom] = i;
+        			    System.err.println("posNoms["+nNom+"] : " + posNoms[nNom]);
+        			    nNom++;
+        		}
+		    }
+		    
+		    for (int j = 0; j < nbAdjectif; j++) {
+    			if(adjectif[j][0].equalsIgnoreCase(splitPhrase[i]) ||
+        			adjectif[j][1].equalsIgnoreCase(splitPhrase[i])||
+        			adjectif[j][2].equalsIgnoreCase(splitPhrase[i])||
+        			adjectif[j][3].equalsIgnoreCase(splitPhrase[i])) {
+        			    posAdjs[nAdj] = i;
+        			    System.err.println("posAdjs["+nAdj+"] : " + posAdjs[nAdj]);
+        			    nAdj++;
+        		}
+		    }
+		    
+		}
+		
+		if(posVerbe == 1){
+		    valeurSujet = choixSujet(splitPhrase[0]);
+		    posArticle = 0;
+		    if(nbNom!=0 && nbAdjectif==0){
+		        phraseCor = splitPhrase[0];
+		        int j = 0;
+		        for(int i=1;i<splitPhrase.length ;i++ ) {
+    		        
+    		        if(i == posVerbe){
+    		            phraseCor += " "+verbes[valeurSujet];
+    		        }else if(j<nbNom && i == posNoms[j]){
+    		            valeurNom = choixNom(splitPhrase[posArticle]);
+    		            phraseCor += " "+noms[j][valeurNom] ;
+    		            j++;
+    		        }
+		        }
+		      System.err.println("phraseCor : " + phraseCor);
+		    }else if(nbNom!=0 && nbAdjectif!=0){
+		      phraseCor = splitPhrase[0];
+		      int posNomAdj = -1;
+		        
+		        for(int i=1;i<splitPhrase.length ;i++ ) {
+    		        int tmp = -1;
+    		        if(i == posVerbe){
+    		            phraseCor += " "+verbes[valeurSujet];
+    		            tmp = 0;
+    		        }
+    		        for(int j = 0;j<nbNom ;j++){
+    		            if( i == posNoms[j]){
+        		            valeurNom = choixNom(splitPhrase[posArticle]);
+        		            phraseCor += " "+noms[j][valeurNom] ;
+        		            tmp = 0;
+        		            break;
+    		            }
+    		        }
+    		        for(int k = 0;k<nbAdjectif ;k++){
+    		            if(i == posAdjs[k]){
+    		            valeurAdj = choixAdj(splitPhrase[posArticle]);
+    		            System.err.println("posArticle : " + posArticle + " splitPhrase[posArticle] : " + splitPhrase[posArticle]);
+    		            if(valeurAdj==1){
+        		             for(int j = 0;j<nbNom ;j++){
+        		                if( (i-1) == posNoms[j] || (i+1) == posNoms[j]){
+        		                    posArticle = j;
+            		            }
+        		             }
+        		            if( "feminin".equals(noms[posArticle][0])){
+    		                    valeurAdj=3;
+    		                }
+    		            }
+    		            System.err.println("valeurAdj : " + valeurAdj + " k : " + k);
+    		            phraseCor += " "+adjectif[k][valeurAdj] ;
+    		            tmp = 0;
+        		      break;
+    		        }
+    		        
+    		        }
+    		        if(tmp == -1) {
+    		            phraseCor += " "+splitPhrase[i];
+    		            valeurSujetArticle = choixSujetArticle(splitPhrase[i]);
+    		            posArticle = i;
+    		            System.err.println("phraseCorElse : " + phraseCor);
+    		        }
+		        }
+		      System.err.println("phraseCor1 : " + phraseCor);
+		    }else{
+		        phraseCor = splitPhrase[0] +" "+verbes[valeurSujet];
+		    }
+		}else {
+		    valeurSujet = 2;
+		    posArticle = 0;
+		    if(nbNom!=0 && nbAdjectif==0){
+		        phraseCor = splitPhrase[0];
+		        valeurSujetArticle = choixSujetArticle(splitPhrase[0]);
+		        int j = 0;
+		        for(int i=1;i<splitPhrase.length ;i++ ) {
+    		        
+    		        if(i == posVerbe){
+    		            phraseCor += " "+verbes[valeurSujetArticle];
+    		        }else if(j<nbNom && i == posNoms[j]){
+    		            valeurNom = choixNom(splitPhrase[posArticle]);
+    		            phraseCor += " "+noms[j][valeurNom] ;
+    		            j++;
+    		        }else {
+    		            phraseCor += " "+splitPhrase[i];
+    		            valeurSujetArticle = choixSujetArticle(splitPhrase[i]);
+    		            posArticle = i;
+    		        }
+		        }
+		      System.err.println("phraseCor2 : " + phraseCor);
+		    }else if(nbNom!=0 && nbAdjectif!=0){
+		        phraseCor = splitPhrase[0];
+		        valeurSujetArticle = choixSujetArticle(splitPhrase[0]);
+		        int posNomAdj = -1;
+		        
+		        for(int i=1;i<splitPhrase.length ;i++ ) {
+    		        int tmp = -1;
+    		        if(i == posVerbe){
+    		            phraseCor += " "+verbes[valeurSujetArticle];
+    		            tmp = 0;
+    		        }
+    		        for(int j = 0;j<nbNom ;j++){
+        		            if( i == posNoms[j]){
+            		            valeurNom = choixNom(splitPhrase[posArticle]);
+            		            System.err.println("posArticle : " + posArticle + " splitPhrase[posArticle] : " + splitPhrase[posArticle]);
+            		            phraseCor += " "+noms[j][valeurNom] ;
+            		            System.err.println("phraseCorNom : " + phraseCor);
+            		            tmp = 0;
+            		            break;
+        		            }
+    		        }
+    		        for(int k = 0;k<nbAdjectif ;k++){
+    		            for(int kk = 0;kk<nAdj ;kk++){
+        		            if(i == posAdjs[kk]){
+            		            valeurAdj = choixAdj(splitPhrase[posArticle]);
+            		            System.err.println("posArticle : " + posArticle + " splitPhrase[posArticle] : " + splitPhrase[posArticle]);
+            		            if(valeurAdj==1){
+                		             System.err.println(" - "+i +" posVerbe "+posVerbe);
+                		             int posJ = 0;
+                		             for(int j = 0;j<nbNom ;j++){
+                		                if(i<posVerbe){
+                		                    for(int l=0;l<posVerbe;l++){
+                		                        if( l == posNoms[j]){
+                        		                    posJ = j;
+                        		                    System.err.println("posJ : " + posJ +" - "+i);
+                            		            }
+                		                    }
+                		                }else if(i>posVerbe){
+                		                    System.err.println("dans posVerbe > " + splitPhrase.length);
+                		                    for(int l=posVerbe;l<splitPhrase.length;l++){
+                		                        System.err.println(l +"  > " + posNoms[j]);
+                		                        if( l == posNoms[j]){
+                        		                    posJ = j;
+                        		                    System.err.println("posJ : " + posJ);
+                            		            }
+                		                    }
+                		                }
+                		             }
+                		            if( "feminin".equals(noms[posJ][0])){
+            		                    valeurAdj=3;
+            		                }
+        		                }
+        		                System.err.println("splitPhrase[i] : " + splitPhrase[i] + " k : " + k);
+    		                    if(adjectif[k][0].equals(splitPhrase[i]) || adjectif[k][1].equals(splitPhrase[i])
+    		                        ||adjectif[k][2].equals(splitPhrase[i])||adjectif[k][3].equals(splitPhrase[i])){
+    		                            System.err.println("valeurAdj : " + valeurAdj + " k : " + k);
+                    		            phraseCor += " "+adjectif[k][valeurAdj] ;
+                    		            tmp = 0;
+                        		        break;
+    		                        }
+            		        }
+    		            }
+    		            if(tmp == 0){
+    		                break;
+    		            }
+    		        }
+    		        if(tmp == -1) {
+    		            phraseCor += " "+splitPhrase[i];
+    		            valeurSujetArticle = choixSujetArticle(splitPhrase[i]);
+    		            posArticle = i;
+    		            System.err.println("phraseCorElse : " + phraseCor);
+    		        }
+		        }
+		      System.err.println("phraseCor3 : " + phraseCor);
+		    }else{
+		        phraseCor = splitPhrase[0] +" "+verbes[valeurSujet];
+		    }
+		}
+		System.out.println(phraseCor);
+	}
+	
+	public static int choixSujet(String sujet) {
+	    switch(sujet){
+	        case "je" :
+	            return 0;
+	        case "tu" :
+	            return 1;
+	        case "il" :
+	        case "elle" :
+	            return 2;
+	        case "nous" :
+	            return 3;
+	        case "vous" :
+	            return 4;
+	        case "ils" :
+	        case "elles" :
+	            return 5;
+	    }
+	    return -1;
+	}
+	public static int choixAdj(String genre) {
+	    switch(genre){
+	        case "un" :
+	        case "le" :
+	            return 0;
+	        case "une" :
+	        case "la" :
+	            return 2;
+	        case "les" :
+	        case "des" :
+	            return 1;
+	    }
+	    return -1;
+	}
+	public static int choixSujetArticle(String genre){
+	    switch(genre){
+	        case "un" :
+	        case "le" :
+	        case "une" :
+	        case "la" :
+	            return 2;
+	        case "les" :
+	        case "des" :
+	            return 5;
+	    }
+	    return -1;
+	}
+	public static int choixNom(String genre) {
+	    switch(genre){
+	        case "un" :
+	        case "le" :
+	        case "une" :
+	        case "la" :
+	        case "il" :
+	        case "elle" :
+	        case "tu" :
+	        case "je" :
+	            return 1;
+	        case "les" :
+	        case "des" :
+	        case "nous" :
+	        case "vous" :
+	        case "ils" :
+	        case "elles" :
+	            return 2;
+	    }
+	    return -1;
+	}
+}
