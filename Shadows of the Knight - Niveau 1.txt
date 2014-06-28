@@ -1,0 +1,190 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        
+        int largeur = in.nextInt();
+        int hauteur = in.nextInt();
+        int NbSaut = in.nextInt();
+        int posX = in.nextInt();
+        int posY = in.nextInt();
+        int pos[] = new int[2];
+        int valeur = 10;
+        String lastPosBommbe = "";
+        pos[0] = posX;
+        pos[1] = posY;
+        in.nextLine();
+        System.err.println("Taille  : "+largeur+" - "+hauteur);
+        System.err.println("Nombre de saut  : "+NbSaut);
+        
+        int premierTours = 0;
+        while (true) {
+            // Read information from standard input
+            String bombe = in.nextLine();
+            
+            if(premierTours == 0){
+                lastPosBommbe = bombe;
+                premierTours++;
+            }
+            
+            System.err.println("valeur  : "+valeur);
+            valeur = newValeur(bombe,lastPosBommbe,pos,valeur, largeur, hauteur);
+            pos = newPosition(bombe,pos,valeur);
+            System.err.println("lastPosBommbe " +lastPosBommbe);
+            System.err.println("Bombe "+bombe);
+            System.err.println("Position  : "+pos[0]+" - "+pos[1]);
+            System.err.println("valeur  : "+valeur);
+            System.out.println(pos[0]+" "+ pos[1]);
+            lastPosBommbe = bombe;
+        }
+    }
+    
+    public static int newValeur(String bombe,String lastPosBommbe,  int[] pos, int valeur, int largeur, int hauteur){
+        
+        switch(bombe){
+            case "U":
+                if(lastPosBommbe.equalsIgnoreCase(bombe)){
+                    if((pos[1]-(valeur+1))>0){
+                        valeur++;
+                    }else{
+                        valeur = 1;
+                    }
+                }else{
+                    valeur = 1;
+                }
+                break;
+            case "UR":
+                if(lastPosBommbe.equalsIgnoreCase(bombe)){
+                    if((pos[1]-(valeur+1))>0 && (pos[0]+(valeur+1))<largeur){
+                        valeur++;
+                    }else{
+                        valeur = 1;
+                    }
+                }else{
+                    valeur = 1;
+                }
+                break;
+            case "R":
+                if(lastPosBommbe.equalsIgnoreCase(bombe)){
+                    if((pos[0]+(valeur+1))<largeur){
+                        valeur++;
+                    }else{
+                        valeur = 1;
+                    }
+                }else{
+                    valeur = 1;
+                }
+                System.err.println("R");
+                break;
+            case "DR":
+                if(lastPosBommbe.equalsIgnoreCase(bombe)){
+                    if((pos[1]+valeur+1)<hauteur && (pos[0]+(valeur+1))<largeur){
+                        valeur++;
+                    }else{
+                        valeur = 1;
+                    }
+                }else{
+                    valeur = 1;
+                }
+                break;
+            case "D":
+                if(lastPosBommbe.equalsIgnoreCase(bombe)){
+                    if((pos[1]+valeur+1)<hauteur){
+                        valeur++;
+                    }else{
+                        valeur = 1;
+                    }
+                }else{
+                    valeur = 1;
+                }
+                break;
+            case "DL":
+                if(lastPosBommbe.equalsIgnoreCase(bombe)){
+                    if((pos[1]+valeur+1)<hauteur && (pos[0]-(valeur+1))>0){
+                        valeur++;
+                    }else{
+                        valeur = 1;
+                    }
+                }else{
+                    valeur = 1;
+                }
+                break;
+            case "L":
+                 if(lastPosBommbe.equalsIgnoreCase(bombe)){
+                    if((pos[0]-(valeur+1))>0){
+                        valeur++;
+                    }else{
+                        valeur = 1;
+                    }
+                }else{
+                    valeur = 1;
+                }
+                break;
+            case "UL":
+                if(lastPosBommbe.equalsIgnoreCase(bombe)){
+                    if((pos[1]-(valeur+1))>0 && (pos[0]-(valeur+1))>0){
+                        valeur++;
+                    }else{
+                        valeur = 1;
+                    }
+                }else{
+                    valeur = 1;
+                }
+                break;
+        }
+        return valeur;
+    }
+        
+    public static int[] newPosition(String bombe, int[] pos , int valeur){
+        int posX = pos[0];
+        int posY = pos[1];
+        System.err.println("Position in  : "+posX+" - "+posY);
+        switch(bombe){
+            case "U":
+                posY = posY - valeur;
+                System.err.println("U");
+                break;
+            case "UR":
+                posY = posY-valeur;
+                posX = posX+valeur;
+                System.err.println("UR");
+                break;
+            case "R":
+                posX = posX+valeur;
+                System.err.println("R");
+                break;
+            case "DR":
+                posY = posY+valeur;
+                posX = posX+valeur;
+                System.err.println("DR");
+                break;
+            case "D":
+                posY = posY+valeur;
+                System.err.println("D");
+                break;
+            case "DL":
+                posY = posY+valeur;
+                posX = posX-valeur;
+                System.err.println("DL");
+                break;
+            case "L":
+                posX = posX-valeur;
+                System.err.println("L");
+                break;
+            case "UL":
+                posY = posY-valeur;
+                posX = posX-valeur;
+                System.err.println("UL");
+                break;
+        }
+        pos[0] = posX;
+        pos[1] = posY;
+        System.err.println("Position out  : "+posX+" - "+posY);
+        System.err.println("Position  : "+pos[0]+" - "+pos[1]);
+        return pos;
+    }
+}
