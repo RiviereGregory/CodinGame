@@ -45,8 +45,8 @@ class Solution {
         
         Integer diffMin = null;
         diffMin = Math.abs(puissance[1] - puissance[0]);
-        for(int i = 0; i<compteur; i++){
-            for(int j = i+1 ; j<compteur-1 ; j++){
+        for(int i = 0; i<=compteur; i++){
+            for(int j = i+1 ; j<=compteur-1 ; j++){
                 if(Math.abs(puissance[j] - puissance[i]) < diffMin){
                     diffMin = Math.abs(puissance[j] - puissance[i]);
                 }

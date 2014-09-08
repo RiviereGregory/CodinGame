@@ -16,7 +16,7 @@ class Solution {
 			temperature[i] = in.nextInt();
 			//System.out.println(temperature[i]);
 		}
-	    int min = 1000;
+	    int min = 100000;
 		for (int i = 0; i < n; i++) {
 		    if(Math.abs(min) == Math.abs(temperature[i])){
 		        if(min<temperature[i]){
@@ -28,7 +28,7 @@ class Solution {
 		        
 		    }
 		}
-		if(min==1000){
+		if(min==100000){
 		    System.out.println("0");
 		}else{
 		    System.out.println(min);
