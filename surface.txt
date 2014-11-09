@@ -14,12 +14,15 @@ class Solution {
 		char plan[][] = new char[largeur][hauteur];
 		System.err.println("taille : " +largeur+" - " + hauteur);
 		in.nextLine();
-		
+		int nombreTerre = 0;
 		System.err.println("plan : ");
 		for (int i = 0; i < hauteur ; i++) {
 			String line = in.nextLine();
 			for (int j = 0; j < largeur ; j++) {
 			    plan[j][i] = line.charAt(j);
+			   if(plan[j][i] == '#'){
+			        nombreTerre++;
+			   }
 			   // System.err.print(plan[j][i]);
 		    }
 		    //System.err.println("");
@@ -30,21 +33,36 @@ class Solution {
 		    coordTest[i][0] = in.nextInt();
 		    coordTest[i][1] = in.nextInt();
 		    System.err.println("coord test "+i+" : "+coordTest[i][0]+" - "+coordTest[i][1]);
-		    testLac(plan, coordTest , i);
+		    testLac(plan, coordTest , i, nombreTerre);
 		}
 		
 		System.err.println("plan taille  : "+plan.length+" - "+plan[0].length);
 		
 	}
 	
-	public static void testLac(char[][] plan, int[][] coordTest , int coord){
+	public static void testLac(char[][] plan, int[][] coordTest , int coord, int nombreTerre){
 	    int posX = coordTest[coord][0];
 	    int posY = coordTest[coord][1];
+	    Boolean ok = false;
+	    int largeur =plan.length;
+	    int hauteur =plan[0].length;
+	    int surf = largeur*hauteur;
+	    double ratio = 1.0*nombreTerre/surf;
+	    if ((ratio) < (1.0/1000)){
+	        ok = true;
+	    }
+	    System.err.println("nombreTerre : "+(nombreTerre));
+	    System.err.println("nombreTerre/surf  : "+(ratio));
 	    
 	    if(plan[posX][posY] == '#'){
 	        System.out.println("0");
 	    }else{
-	        System.out.println(surfaceLac(plan, coordTest , coord));
+	        if (ok){
+	            System.out.println(surf-nombreTerre);
+	        }else{
+	            System.out.println(surfaceLac(plan, coordTest , coord));
+	        }
+	        
 	    }
 	}
 	
@@ -57,13 +75,14 @@ class Solution {
 	    planTester[posX][posY] = '1';
 	    
 	    surface = surfaceLac(plan,planTester, posX , posY, surface);
-	    
+	    System.err.println("surface  : "+surface);
 	    return surface;
 	}
 	
 	public static int surfaceLac(char[][] plan,char[][] planTester, int posX , int posY, int surface){
 	    int largeur =plan.length;
 	    int hauteur =plan[0].length;
+	    
 	    //System.err.println("coord  : "+posX+" - "+posY);
 	    if((posX+1) < largeur && plan[posX+1][posY] == 'O'){
 	        if(planTester[posX+1][posY] != '1'){
