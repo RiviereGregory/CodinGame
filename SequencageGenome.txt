@@ -1,0 +1,108 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		int n = in.nextInt();
+		in.nextLine();
+		ArrayList<String> listeSequences = new ArrayList<>();
+		for (int i = 0; i < n; i++) {
+			listeSequences.add(in.nextLine());
+			//System.err.println(listeSequences.get(i));
+		}
+		MyComparator cc = new MyComparator();
+		java.util.Collections.sort(listeSequences, cc);
+		for (int i = 0; i < n; i++) {
+			System.err.println(listeSequences.get(i));
+		}
+
+		System.out.println(minLong(listeSequences));
+	}
+	
+	public static int longueurSequence(ArrayList<String> listeSequences){
+	    int nbSeq = listeSequences.size();
+	    if(nbSeq == 1){
+	        return listeSequences.get(0).length();
+	    }
+	    int lgSeq = 0;
+	    boolean seqOK = false;
+	    int nbCommun = 0;
+	    int n=0;
+	    int n1=0;
+	    for(int i=0; i<nbSeq-1;i++){
+	        n = listeSequences.get(i).length();
+	        n1 = listeSequences.get(i+1).length();
+	        seqOK = false;
+            nbCommun = 0;
+            for(int j=n-1; j>=0;j--){
+                for(int k=n1-1; k>=0;k--){
+                    if(listeSequences.get(i).charAt(j) == listeSequences.get(i+1).charAt(k)){
+                        seqOK = true;
+                        nbCommun = 1;
+                        for(int l = k-1 ; l>=k-n;l--){
+                            if(l >= 0 && (j - nbCommun) >= 0){
+                                System.err.println("j "+j+"l "+l+" k "+k+" nbCommun " +nbCommun);
+                                System.err.println(listeSequences.get(i).charAt(j - nbCommun));
+                                System.err.println(listeSequences.get(i+1).charAt(l));
+                                if(listeSequences.get(i).charAt(j - nbCommun) == listeSequences.get(i+1).charAt(l)){
+                                    System.err.println("true");
+                                    seqOK = true;
+                                    nbCommun++;
+                                }else {
+                                    seqOK = false;
+                                    nbCommun = 0;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (seqOK == true){
+                        break;
+                    }
+                }
+                if (seqOK == true){
+                    break;
+                }                
+            }
+            if (seqOK == true){
+                lgSeq = lgSeq + n - nbCommun;
+            }else {
+                lgSeq = lgSeq + n;
+            }
+	    }
+	    lgSeq = lgSeq + n1;
+	    return lgSeq;
+	}
+	
+	public static int minLong(ArrayList<String> listeSequences){
+		int n = listeSequences.size();
+		int minSize = longueurSequence(listeSequences);
+		for (int j = 0; j < n; j++) {
+        	for (int i = 1; i < n; i++) {
+        		String tmp = listeSequences.get(i-1);
+        		listeSequences.remove(i-1);
+        		listeSequences.add(i,tmp);
+        		int sizeTmp = longueurSequence(listeSequences);
+        		if( sizeTmp < minSize){
+        			minSize = sizeTmp;
+        		}
+        	}
+		}
+		
+		return minSize;
+	}
+}
+
+class MyComparator implements Comparator<String> {
+
+    public int compare(String s1, String s2) {
+        return (s1.length() - s2.length());
+    }
+}
+
