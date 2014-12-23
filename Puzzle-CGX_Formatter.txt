@@ -1,0 +1,150 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt();
+        in.nextLine();
+        String CGXLine[] = new String[N];
+        String ligneComplete = "";
+        for (int i = 0; i < N; i++) {
+            CGXLine[i] = in.nextLine();
+            //System.err.println(CGXLine[i]);
+            ligneComplete += CGXLine[i];
+        }
+        
+        System.err.println(ligneComplete);
+        
+        formateLigne(ligneComplete);
+    }
+    
+    public static void ecritLigneFormate(String ligne){
+       if (ligne == null || ligne.trim().equalsIgnoreCase("")){
+            return;
+        }
+        System.out.println(ligne);
+    }
+    
+    public static void formateLigne(String ligne){
+        
+        if (ligne == null || ligne.trim().equalsIgnoreCase("")){
+            return;
+        }
+        int dernierIndexOuvre = 0;
+        int dernierIndexFerme = 0;
+        String newLigne = ligne.trim();
+        
+        if(newLigne.indexOf('(') < 0){
+            ecritLigneFormate(newLigne);
+        }
+        
+        List<Integer> listeIndexOuvre = new ArrayList<>();
+        List<Integer> listeIndexFerme = new ArrayList<>();
+        int nbOuvre;
+        
+        while (newLigne.indexOf('(',dernierIndexOuvre) >= 0){
+            listeIndexOuvre.add(newLigne.indexOf('(',dernierIndexOuvre));
+            dernierIndexOuvre = newLigne.indexOf('(',dernierIndexOuvre) + 1;
+        }
+        nbOuvre = listeIndexOuvre.size();
+        //System.err.println(nbOuvre);
+        
+        while (newLigne.indexOf(')',dernierIndexFerme) >= 0){
+            listeIndexFerme.add(newLigne.indexOf(')',dernierIndexFerme));
+            dernierIndexFerme = newLigne.indexOf(')',dernierIndexFerme) + 1;
+        }
+        if(nbOuvre > 0 && listeIndexOuvre.get(0) > 0){
+            ecritLigneFormate(newLigne.substring(0,listeIndexOuvre.get(0)).trim());
+        }
+        
+        testDoubleBoucle(newLigne,listeIndexOuvre,listeIndexFerme);
+        
+        if(nbOuvre > 0 && listeIndexFerme.get(nbOuvre-1)+1 < newLigne.length()){
+            ecritLigneFormate(newLigne.substring(listeIndexFerme.get(nbOuvre-1)+1).trim());
+        }
+    }
+    
+    public static int nbImbrique( List<Integer> listeIndexOuvre,  List<Integer> listeIndexFerme, int i){
+        int nbOuvre = listeIndexOuvre.size();
+        int nbImb = 0;
+        for (int j = i+1 ; j<nbOuvre; j++){
+            if(listeIndexOuvre.get(j) < listeIndexFerme.get(i)){
+                nbImb++;
+            }
+        }
+        
+        return nbImb;
+    }
+    public static void testDoubleBoucle(String newLigne,List<Integer> listeIndexOuvre,List<Integer> listeIndexFerme){
+        int nbOuvre = listeIndexOuvre.size();
+        String tab = "    ";
+        String espace = "";
+        boolean fermeture = false;
+        int nbOuverture = 0;
+        int nbEspace = 0;
+        
+        for(int i =0; i< nbOuvre ; i++){
+            int minChar = listeIndexOuvre.get(i);
+            int maxChar;
+            if(i<nbOuvre-1){
+                maxChar = listeIndexOuvre.get(i+1);
+            }else {
+                maxChar = listeIndexFerme.get(i);
+            }
+            ecritLigneFormate(espace + "(");
+            nbOuverture++;
+            //System.err.println(minChar +" - " +maxChar);
+            String ligneFormat ="";
+            boolean dernierMessage = false;
+            for(int intChar = minChar+1; intChar< maxChar+1 ; intChar++){
+                //System.err.println("Dans la boucle");
+               // System.err.println(nbOuverture +" - " + nbEspace);
+                if(newLigne.charAt(intChar) == ')'){
+                    ecritLigneFormate(espace + tab +ligneFormat.trim());
+                    //System.err.println(nbOuverture +" - " + nbEspace);
+                    if (!espace.equalsIgnoreCase("") && nbOuverture == nbEspace){
+                        espace = espace.substring(0,espace.length()-4);
+                        nbEspace--;
+                    }
+                    if((intChar+1) < maxChar && newLigne.charAt(intChar+1) ==';'){
+                        ecritLigneFormate(espace + ");");
+                        intChar++;
+                    }else {
+                        ecritLigneFormate(espace + ")");
+                    }
+                    ligneFormat = "";
+                    fermeture = true;
+                    nbOuverture--;
+                    if (!espace.equalsIgnoreCase("") && nbOuverture == nbEspace && i == nbOuvre-1){
+                        espace = espace.substring(0,espace.length()-4);
+                        nbEspace--;
+                    }
+                }else if(newLigne.charAt(intChar) ==';') {
+                    ecritLigneFormate(espace + tab + ligneFormat.trim() + ";");
+                    ligneFormat = "";
+                }
+                else{
+                    if(newLigne.charAt(intChar)!= ' '){
+                        ligneFormat += newLigne.charAt(intChar);
+                    }
+                }
+                if(intChar == maxChar && ligneFormat.length() > 1){
+                    int intParenthese = ligneFormat.indexOf('(');
+                    //System.err.println("Message" + ligneFormat.substring(0,intParenthese));
+                    ecritLigneFormate(espace + tab + ligneFormat.substring(0,intParenthese).trim());
+                }
+            }
+            if(fermeture == false){
+                espace += tab;
+                nbEspace++;
+            }
+        }
+    }
+}

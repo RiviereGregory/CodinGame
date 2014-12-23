@@ -23,8 +23,8 @@ class Solution {
 		carte = new Character[ligne][colonne];
 		for(int i=0; i<ligne ; i++){
 		    line = in.nextLine();
-		    //System.out.println(line);
-		    //System.out.println(line.length());
+		    //System.err.println(line);
+		    //System.err.println(line.length());
 		    for(int j=0; j<colonne; j++){
 		        
 		        carte[i][j] = line.charAt(j);
@@ -40,11 +40,10 @@ class Solution {
 		            teleport[1][0] = i;
 		            teleport[1][1] = j;
 		        }
-		        //System.out.print(carte[i][j]);
+		        System.err.print(carte[i][j]);
 		    }
-		    //System.out.println();
+		    System.err.println();
 		}
-		char position = carte[coordX][coordY];
 		int etatOrientation = 0;
 		int modeCasseur = 0;
 		int modeInverseur = 0;
@@ -60,30 +59,30 @@ class Solution {
 		                 if(!(sud.equals('#') || sud.equals('X'))){
 		                     
 		                     message[compteur] = "SOUTH";
-		                     compteur++; boucle = 0; boucle = 0;
+		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("SOUTH");
+            		       //System.err.println("SOUTH");
             		       coordX += 1;
             		       etatOrientation = 0;
             		    }else  if(!(est.equals('#') || est.equals('X') )){
             		        message[compteur] = "EAST";
-		                     compteur++; boucle = 0; boucle = 0;
+		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("EAST");
+            		       //System.err.println("EAST");
             		       coordY += 1;
             		       etatOrientation = 1;
             		   }else  if(!(nord.equals('#') || nord.equals('X') )){
             		        message[compteur] = "NORTH";
-		                     compteur++; boucle = 0; boucle = 0;
+		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("NORTH");
+            		       //System.err.println("NORTH");
             		       coordX -= 1;
             		       etatOrientation = 2;
             		   }else  if(!(ouest.equals('#') || ouest.equals('X'))){
             		        message[compteur] = "WEST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("WEST");
+            		       //System.err.println("WEST");
             		       coordY -= 1;
             		       etatOrientation = 3;
             		   }
@@ -92,28 +91,28 @@ class Solution {
             		        message[compteur] = "SOUTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("SOUTH");
+            		       //System.err.println("SOUTH");
             		       coordX += 1;
             		       etatOrientation = 0;
             		    }else  if(!(est.equals('#') )){
             		        message[compteur] = "EAST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("EAST");
+            		       //System.err.println("EAST");
             		       coordY += 1;
             		       etatOrientation = 1;
             		   }else  if(!(nord.equals('#'))){
             		        message[compteur] = "NORTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("NORTH");
+            		       //System.err.println("NORTH");
             		       coordX -= 1;
             		       etatOrientation = 2;
             		   }else  if(!(ouest.equals('#'))){
             		        message[compteur] = "WEST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("WEST");
+            		       //System.err.println("WEST");
             		       coordY -= 1;
             		       etatOrientation = 3;
             		   }
@@ -125,7 +124,7 @@ class Solution {
             		        message[compteur] = "EAST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("EAST");
+            		       //System.err.println("EAST");
             		       coordY += 1;
             		       etatOrientation = 1;
             		   }else {
@@ -137,7 +136,7 @@ class Solution {
             		        message[compteur] = "EAST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("EAST");
+            		       //System.err.println("EAST");
             		       coordY += 1;
             		       etatOrientation = 1;
             		   }else {
@@ -152,7 +151,7 @@ class Solution {
             		        message[compteur] = "NORTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("NORTH");
+            		       //System.err.println("NORTH");
             		       coordX -= 1;
             		       etatOrientation = 2;
             		   }else { 
@@ -164,7 +163,7 @@ class Solution {
             		        message[compteur] = "NORTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("NORTH");
+            		       //System.err.println("NORTH");
             		       coordX -= 1;
             		       etatOrientation = 2;
             		   }else { 
@@ -179,7 +178,7 @@ class Solution {
             		        message[compteur] = "WEST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("WEST");
+            		       //System.err.println("WEST");
             		       coordY -= 1;
             		       etatOrientation = 3;
             		   }else {
@@ -191,7 +190,7 @@ class Solution {
             		        message[compteur] = "WEST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("WEST");
+            		       //System.err.println("WEST");
             		       coordY -= 1;
             		       etatOrientation = 3;
             		   }else {
@@ -207,28 +206,28 @@ class Solution {
             		        message[compteur] = "WEST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("WEST");
+            		       //System.err.println("WEST");
             		       coordY -= 1;
             		       etatOrientation = 4;
             		   }else  if(!(nord.equals('#') || nord.equals('X') )){
             		        message[compteur] = "NORTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("NORTH");
+            		       //System.err.println("NORTH");
             		       coordX -= 1;
             		       etatOrientation = 5;
             		   }else  if(!(est.equals('#') || est.equals('X') )){
             		        message[compteur] = "EAST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("EAST");
+            		       //System.err.println("EAST");
             		       coordY += 1;
             		       etatOrientation = 6;
             		   }else  if(!(sud.equals('#') || sud.equals('X'))){
             		        message[compteur] = "SOUTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("SOUTH");
+            		       //System.err.println("SOUTH");
             		       coordX += 1;
             		       etatOrientation = 7;
             		    }
@@ -237,28 +236,28 @@ class Solution {
             		        message[compteur] = "WEST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("WEST");
+            		       //System.err.println("WEST");
             		       coordY -= 1;
             		       etatOrientation = 4;
             		   }else  if(!(nord.equals('#'))){
             		        message[compteur] = "NORTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("NORTH");
+            		       //System.err.println("NORTH");
             		       coordX -= 1;
             		       etatOrientation = 5;
             		   }else  if(!(est.equals('#') )){
             		        message[compteur] = "EAST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("EAST");
+            		       //System.err.println("EAST");
             		       coordY += 1;
             		       etatOrientation = 6;
             		   }else  if(!(sud.equals('#'))){
             		        message[compteur] = "SOUTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("SOUTH");
+            		       //System.err.println("SOUTH");
             		       coordX += 1;
             		       etatOrientation = 7;
             		    }
@@ -270,7 +269,7 @@ class Solution {
             		        message[compteur] = "NORTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("NORTH");
+            		       //System.err.println("NORTH");
             		       coordX -= 1;
             		       etatOrientation = 5;
             		   }else {
@@ -282,7 +281,7 @@ class Solution {
             		        message[compteur] = "NORTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("NORTH");
+            		       //System.err.println("NORTH");
             		       coordX -= 1;
             		       etatOrientation = 5;
             		   }else {
@@ -297,7 +296,7 @@ class Solution {
             		        message[compteur] = "EAST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("EAST");
+            		       //System.err.println("EAST");
             		       coordY += 1;
             		       etatOrientation = 6;
             		   }else { 
@@ -309,7 +308,7 @@ class Solution {
             		        message[compteur] = "EAST";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("EAST");
+            		       //System.err.println("EAST");
             		       coordY += 1;
             		       etatOrientation = 6;
             		   }else { 
@@ -324,7 +323,7 @@ class Solution {
             		        message[compteur] = "SOUTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("SOUTH");
+            		       //System.err.println("SOUTH");
             		       coordX += 1;
             		       etatOrientation = 7;
             		    }else {
@@ -336,7 +335,7 @@ class Solution {
             		        message[compteur] = "SOUTH";
 		                     compteur++; boucle = 0;
 		                     
-            		       //System.out.println("SOUTH");
+            		       //System.err.println("SOUTH");
             		       coordX += 1;
             		       etatOrientation = 7;
             		    }else {
@@ -358,7 +357,7 @@ class Solution {
 		           modeInverseur = 0;
 		       }
 		       //message[compteur-1]+= " "+modeInverseur +" - "+ etatOrientation;
-		       //System.out.println(modeInverseur +" - "+ etatOrientation);
+		       //System.err.println(modeInverseur +" - "+ etatOrientation);
 		       etatOrientation = 7 - etatOrientation;
 		   }
 		
@@ -371,7 +370,7 @@ class Solution {
 		           coordX = teleport[0][0];
 		           coordY = teleport[0][1];
 		       }
-		       //System.out.println(coordX +" - " + coordY);
+		       //System.err.println(coordX +" - " + coordY);
 		   }
 		    if(carte[coordX][coordY].equals('B') && modeCasseur == 0){
 		       modeCasseur = 1;
@@ -404,8 +403,8 @@ class Solution {
 		}else{
 		    System.out.println("LOOP");
 		}
-		//System.out.println(ligne);
-		//System.out.println(colonne);
+		//System.err.println(ligne);
+		//System.err.println(colonne);
 		
-	}
+	}	
 }

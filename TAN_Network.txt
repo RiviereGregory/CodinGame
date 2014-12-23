@@ -1,0 +1,92 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		String depart  = in.nextLine();
+		String arrive  = in.nextLine();
+		int nbArret = in.nextInt();
+		in.nextLine();
+		if(nbArret>10000){
+		    nbArret = 10000;
+		}
+		String line;
+		//String listeArret[][] = new String[nbArret][9];
+		HashMap<String,String[]> listeArret = new HashMap<>();
+		for(int i=0; i<nbArret;i++){
+		    String ligneSplit[] = new String[9];
+		    line = in.nextLine();
+		    ligneSplit = line.split(",");
+		    //listeArret[i] = ligneSplit;
+		    String ligneTMP[] = new String[9];
+		    ligneTMP = ligneSplit;
+		    listeArret.put(ligneTMP[0], ligneTMP);
+		    //System.err.println(line);
+	        //System.err.println(listeArret[i][0]);
+	        //String tmp[] = new String[9];
+            //tmp = listeArret.get("StopArea:ABDU");
+            //System.err.println(tmp[0] + " - " +tmp[1]);
+		}
+
+        int nbLiaison = in.nextInt();
+		in.nextLine();
+		//String listeLiaisons[][] = new String[nbLiaison][2];
+		HashMap<String,List<String>> liaisons = new HashMap<>();
+		for(int i=0; i<nbLiaison;i++){
+		    String ligneSplit[] = new String[2];
+		    line = in.nextLine();
+		    ligneSplit = line.split(" ");
+		    List<String> listeLiaison = new ArrayList<>();
+		    if(liaisons.get(ligneSplit[0]) == null){
+		        listeLiaison.add(ligneSplit[1]);
+		        liaisons.put(ligneSplit[0],listeLiaison);
+		    }else{
+		        listeLiaison = liaisons.get(ligneSplit[0]);
+		        listeLiaison.add(ligneSplit[1]);
+		        liaisons.put(ligneSplit[0],listeLiaison);
+		    }
+		}
+		
+		List<String> listeLiaison = new ArrayList<>();
+		listeLiaison = liaisons.get(depart);
+		for(int i = 0 ; i<listeLiaison.size() ; i++){
+		    if(listeLiaison.get(i).equalsIgnoreCase(arrive)){
+		    String tmp[] = new String[9];
+            tmp = listeArret.get(depart);
+            String tmp1[] = new String[9];
+            tmp1 = listeArret.get(arrive);
+            System.out.println(tmp[1].substring(1,tmp[1].length()-1));
+		    System.out.println(tmp1[1].substring(1,tmp1[1].length()-1));
+		    }
+		}
+		
+		
+		/*System.err.println(listeLiaison.size());
+		System.err.println(listeLiaison.get(0));
+		
+		String tmp[] = new String[9];
+        tmp = listeArret.get(depart);
+        String tmp1[] = new String[9];
+        tmp1 = listeArret.get(arrive);
+		System.err.println(distance(tmp[4],tmp[3],tmp1[4],tmp1[3]));
+		
+		System.out.println(tmp[1].substring(1,tmp[1].length()-1));
+		System.out.println(tmp1[1].substring(1,tmp1[1].length()-1));*/
+	}
+    
+    public static Double distance(String longA,String latA,String longB,String latB) {
+        Double longitudeA = Double.valueOf(longA)*Math.PI/180;
+        Double longitudeB = Double.valueOf(longB)*Math.PI/180;
+        Double latitudeA = Double.valueOf(latA)*Math.PI/180;
+        Double latitudeB = Double.valueOf(latB)*Math.PI/180;
+        
+        Double x = (longitudeB - longitudeA) * Math.cos((latitudeA + latitudeB)/2.0);
+        Double y = latitudeB - latitudeA;
+        
+        Double d = Math.sqrt(x*x + y*y)*6371;
+        return d;
+    }
+}
