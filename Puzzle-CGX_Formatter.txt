@@ -71,24 +71,15 @@ class Solution {
         }
     }
     
-    public static int nbImbrique( List<Integer> listeIndexOuvre,  List<Integer> listeIndexFerme, int i){
-        int nbOuvre = listeIndexOuvre.size();
-        int nbImb = 0;
-        for (int j = i+1 ; j<nbOuvre; j++){
-            if(listeIndexOuvre.get(j) < listeIndexFerme.get(i)){
-                nbImb++;
-            }
-        }
-        
-        return nbImb;
-    }
     public static void testDoubleBoucle(String newLigne,List<Integer> listeIndexOuvre,List<Integer> listeIndexFerme){
         int nbOuvre = listeIndexOuvre.size();
         String tab = "    ";
         String espace = "";
         boolean fermeture = false;
+        boolean nonModifiable =false;
         int nbOuverture = 0;
         int nbEspace = 0;
+        String ligneFormat ="";
         
         for(int i =0; i< nbOuvre ; i++){
             int minChar = listeIndexOuvre.get(i);
@@ -98,15 +89,25 @@ class Solution {
             }else {
                 maxChar = listeIndexFerme.get(i);
             }
-            ecritLigneFormate(espace + "(");
-            nbOuverture++;
-            //System.err.println(minChar +" - " +maxChar);
-            String ligneFormat ="";
-            boolean dernierMessage = false;
+            if(!nonModifiable){
+                ecritLigneFormate(espace + "(");
+                nbOuverture++;
+                //System.err.println(minChar +" - " +maxChar);
+                ligneFormat ="";
+            }
             for(int intChar = minChar+1; intChar< maxChar+1 ; intChar++){
-                //System.err.println("Dans la boucle");
-               // System.err.println(nbOuverture +" - " + nbEspace);
-                if(newLigne.charAt(intChar) == ')'){
+                
+                if(nonModifiable){
+                    ligneFormat += newLigne.charAt(intChar);
+                    if(newLigne.charAt(intChar) == '\''){
+                        nonModifiable = false;
+                        //System.err.println("Dans non modifiable false " +ligneFormat);
+                        //System.err.println(nbOuverture +" - " + nbEspace);
+                    }
+                }else if(newLigne.charAt(intChar) == '\''){
+                    ligneFormat += newLigne.charAt(intChar);
+                    nonModifiable = true;
+                }else if(newLigne.charAt(intChar) == ')'){
                     ecritLigneFormate(espace + tab +ligneFormat.trim());
                     //System.err.println(nbOuverture +" - " + nbEspace);
                     if (!espace.equalsIgnoreCase("") && nbOuverture == nbEspace){
@@ -135,13 +136,12 @@ class Solution {
                         ligneFormat += newLigne.charAt(intChar);
                     }
                 }
-                if(intChar == maxChar && ligneFormat.length() > 1){
+                if(!nonModifiable && intChar == maxChar && ligneFormat.length() > 1){
                     int intParenthese = ligneFormat.indexOf('(');
-                    //System.err.println("Message" + ligneFormat.substring(0,intParenthese));
                     ecritLigneFormate(espace + tab + ligneFormat.substring(0,intParenthese).trim());
                 }
             }
-            if(fermeture == false){
+            if(!fermeture && !nonModifiable){
                 espace += tab;
                 nbEspace++;
             }

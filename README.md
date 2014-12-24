@@ -44,4 +44,4 @@ Programme fait sur CodinGame
 5. **Bender - La machine à fric**
 6. **Surface**
 7. **Séquençage du génome**
-8. **Puzzle-CGX Formatter
+8. **Puzzle-CGX Formatter**
