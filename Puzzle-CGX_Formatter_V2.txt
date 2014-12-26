@@ -1,0 +1,105 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt();
+        in.nextLine();
+        String CGXLine[] = new String[N];
+        String ligneComplete = "";
+        for (int i = 0; i < N; i++) {
+            CGXLine[i] = in.nextLine();
+            ligneComplete += CGXLine[i];
+        }
+        
+        System.err.println(ligneComplete);
+        
+        formateLigne(ligneComplete);
+    }
+    
+    public static void ecritLigneFormate(String ligne){
+       if (ligne == null || ligne.trim().equalsIgnoreCase("")){
+            return;
+        }
+        System.out.println(ligne);
+    }
+    
+    public static void formateLigne(String ligne){
+        
+        if (ligne == null || ligne.trim().equalsIgnoreCase("")){
+            return;
+        }
+		boolean nonModifiable =false;
+        int nbOuverture = 0;
+        String ligneFormat ="";
+		String tab = "    ";
+        String espace = "";
+		int nbCaractere = ligne.length();
+		boolean bloc = false;
+		
+		for(int intChar = 0; intChar < nbCaractere ; intChar++){
+			if(nonModifiable){
+                ligneFormat += ligne.charAt(intChar);
+				if(ligne.charAt(intChar) == '\''){
+					nonModifiable = false;
+				}
+            }else if(ligne.charAt(intChar) == '\''){
+				ligneFormat += ligne.charAt(intChar);
+				nonModifiable = true;
+			}else if(ligne.charAt(intChar) == '('){
+				//System.err.println("ouverture "  + nbOuverture);
+				if(nbOuverture > 0 && !bloc){
+				    espace += tab;
+				}
+				if (bloc){
+				    ecritLigneFormate(espace +tab +ligneFormat.trim());
+				}else {
+				    ecritLigneFormate(espace +ligneFormat.trim());
+				}
+				
+				ecritLigneFormate(espace + "(");
+				ligneFormat = "";
+				nbOuverture++;
+			}else if(ligne.charAt(intChar) == ')'){
+				nbOuverture--;
+				//System.err.println(" fermeture "+nbOuverture);
+				if(nbOuverture > 0){
+					espace = espace.substring(0,nbOuverture*4);
+				}else {
+					espace = "";
+					bloc = false;
+				}
+				ecritLigneFormate(espace + tab + ligneFormat.trim());
+				if(intChar < (nbCaractere-1) && ligne.charAt(intChar+1) == ';'){
+					ecritLigneFormate(espace + ");");
+					intChar++;
+				}else {
+					ecritLigneFormate(espace + ")");
+				}
+				ligneFormat = "";
+				
+				if (nbOuverture > 0){
+				    bloc = true;
+				}else {
+				    bloc = false;
+				}
+				
+			}else if (ligne.charAt(intChar) == ';'){
+				ligneFormat += ligne.charAt(intChar);
+				ecritLigneFormate(espace + tab + ligneFormat.trim());
+				ligneFormat = "";
+			}else {
+			    if (ligne.charAt(intChar) != ' '){
+				    ligneFormat += ligne.charAt(intChar);
+			    }
+			}
+			//System.err.println(intChar);
+    		if(intChar == nbCaractere-1 && ligneFormat.trim()!=""){
+    			ecritLigneFormate(ligneFormat.trim());
+    		}  
+		}
+    }
+}
