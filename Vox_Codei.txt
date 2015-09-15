@@ -1,0 +1,160 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int width = in.nextInt(); // width of the firewall grid
+        int height = in.nextInt(); // height of the firewall grid
+        int yNoeud[] = new int[height*width];
+        int xNoeud[] = new int[height*width];
+        int iNoeud = 0;
+        int yMur[] = new int[height*width];
+        int xMur[] = new int[height*width];
+        int iMur = 0;
+        char[][] plateau = new char[height][width];
+        for (int i = 0; i < height; i++) {
+            String mapRow = in.next(); // one line of the firewall grid
+            for (int j = 0; j< mapRow.length(); j++){
+                plateau[i][j]=mapRow.charAt(j);
+                if(mapRow.charAt(j) == '@'){
+                    yNoeud[iNoeud] = i;
+                    xNoeud[iNoeud] = j;
+                    iNoeud++;
+                }
+                if(mapRow.charAt(j) == '#'){
+                    yMur[iMur] = i;
+                    xMur[iMur] = j;
+                    iMur++;
+                }
+            }
+            
+        }
+        int xPos=0;
+        int yPos=0;
+        int debutBomb = 0;
+
+        // game loop
+        while (true) {
+            int rounds = in.nextInt(); // number of rounds left before the end of the game
+            int bombs = in.nextInt(); // number of bombs left
+            System.err.println(bombs);
+            // Write an action using System.out.println()
+            // To debug: System.err.println("Debug messages...");
+            if(bombs == iNoeud){
+                System.err.println("bomb = noeud");
+                if(bombs>1){
+                    if(xNoeud[bombs-1] != 0 && (xNoeud[bombs-1]-1) != xNoeud[bombs-2] ){
+                        xPos=xNoeud[bombs-1]-1;
+                        yPos=yNoeud[bombs-1];
+                    }else if(yNoeud[bombs-1]!= 0){
+                        xPos=xNoeud[bombs-1];
+                        yPos=yNoeud[bombs-1]-1;
+                    }
+                    System.out.println(xPos + " " + yPos);
+                }else if(bombs>0){
+                    if(xNoeud[bombs-1] != 0 ){
+                        xPos=xNoeud[bombs-1]-1;
+                        yPos=yNoeud[bombs-1];
+                    }else if(yNoeud[bombs-1]!= 0){
+                        xPos=xNoeud[bombs-1];
+                        yPos=yNoeud[bombs-1]-1;
+                    }
+                    System.out.println(xPos + " " + yPos);
+                }else{
+                    System.out.println("WAIT");
+                }
+                if(iNoeud>0) iNoeud--;
+            }else if(2*bombs == iNoeud){
+                System.err.println("2*bomb = noeud");
+                int iTemp=0;
+                if(bombs>0){
+                    for(int i=1;i<iNoeud;i++){
+                        if((xNoeud[0] == xNoeud[i]) && (yNoeud[0] != (yNoeud[i]-1))){
+                            System.err.println("x " + i);
+                            xPos=xNoeud[0];
+                            yPos=(yNoeud[0]+yNoeud[i])/2;
+                            iTemp = i;
+                            break;
+                        }
+                    }
+                    if((yNoeud[0] == yNoeud[1]) && (xNoeud[0] != (xNoeud[1]-1)) && iTemp == 0){
+                            System.err.println("y " + 1);
+                            yPos=yNoeud[0];
+                            xPos=(xNoeud[0]+xNoeud[1])/2;
+                            iTemp = 1;
+                        }
+                    System.out.println(xPos + " " + yPos);
+                }else{
+                    System.out.println("WAIT");
+                }
+                if(iNoeud>0) {
+                    iNoeud-=2;
+                    int j =1;
+                    for(int i=0;i<iNoeud;i++){
+                        if(j != iTemp){
+                            xNoeud[i] = xNoeud[j];
+                            yNoeud[i] = yNoeud[j];
+                        }else {
+                            j++;
+                            xNoeud[i] = xNoeud[j];
+                            yNoeud[i] = yNoeud[j];
+                        }
+                        j++;
+                    }
+                }
+            }else{
+                System.err.println("bomb != noeud");
+                if(bombs > 0){
+                    xPos=0;
+                    yPos=0;
+                    int finBomb = iNoeud/bombs;
+                    if(finBomb == debutBomb && finBomb < iNoeud){
+                        finBomb++;
+                    }
+                    System.err.println(iNoeud);
+                    System.err.println(finBomb);
+                    for(int i=debutBomb;i<finBomb;i++){
+                        xPos += xNoeud[i];
+                        yPos += yNoeud[i];
+                    }
+                    
+                    xPos/=(iNoeud-debutBomb)/bombs;
+                    yPos/=(iNoeud-debutBomb)/bombs;
+                    System.err.println(xPos + " " + yPos + " " +debutBomb);
+                    System.err.println(plateau[yPos][xPos]);
+                    if(plateau[yPos][xPos] == '@' || plateau[yPos][xPos] == '#'){
+                        while(true){
+                            if(yPos>0 && yPos<height){
+                                yPos++;
+                            }  else  if(xPos>0 && xPos<width){
+                                xPos--;
+                            }
+                            if(plateau[yPos][xPos] == '@' || plateau[yPos][xPos] == '#'){
+                                System.out.println("WAIT");
+                                //break;
+                            }else{
+                                System.out.println(xPos + " " + yPos);
+                                debutBomb = finBomb;
+                                break;
+                            }
+                        }
+                    }else{
+                        System.out.println(xPos + " " + yPos);
+                        debutBomb = iNoeud/bombs;
+                    }
+                }else{
+                    System.out.println("WAIT");
+                }
+                
+            }
+            //System.out.println("WAIT");
+        }
+    }
+}

@@ -1,0 +1,57 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Don't let the machines win. You are humanity's last hope...
+ **/
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int width = in.nextInt(); // the number of cells on the X axis
+        in.nextLine();
+        int height = in.nextInt(); // the number of cells on the Y axis
+        in.nextLine();
+        System.err.println(width+" - "+height); 
+        char[][] tab = new char[height][width];
+        for (int i = 0; i < height; i++) {
+            String line = in.nextLine(); // width characters, each either 0 or .
+            System.err.println(line);
+            for(int j = 0;j< width;j++){
+                tab[i][j]=line.charAt(j);
+                System.err.println(tab[i][j]);
+            }
+             
+        }
+
+       for (int i = 0; i < height; i++) {
+            for(int j = 0;j< width;j++){
+                if (tab[i][j]=='0'){
+                    System.out.print(j+" " +i);
+                    int x=-1;
+                    int y=-1;
+                    for(int jj = j+1;jj<width; jj++){
+                        if (tab[i][jj]=='0'){
+                            x=i;
+                            y=jj;
+                            break;
+                        }
+                    }
+                    System.out.print(" "+y+" " +x);
+                    x=-1;
+                    y=-1;
+                    for(int ii = i+1;ii<height; ii++){
+                        if (tab[ii][j]=='0'){
+                            x=ii;
+                            y=j;
+                            break;
+                        }
+                    }
+                    System.out.print(" "+y+" " +x+"\n");
+                }
+            }
+        }
+
+    }
+}
