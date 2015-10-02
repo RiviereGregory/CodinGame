@@ -47,3 +47,4 @@ Programme fait sur CodinGame
 7. **Séquençage du génome**
 8. **Puzzle-CGX Formatter**
 9. **Vox codei**
+10. **Don't Panic - level2** (60%)

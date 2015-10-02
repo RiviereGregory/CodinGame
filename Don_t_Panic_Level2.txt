@@ -1,0 +1,116 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int nbFloors = in.nextInt(); // number of floors
+        int width = in.nextInt(); // width of the area
+        int nbRounds = in.nextInt(); // maximum number of rounds
+        int exitFloor = in.nextInt(); // floor on which the exit is found
+        int exitPos = in.nextInt(); // position of the exit on its floor
+        int nbTotalClones = in.nextInt(); // number of generated clones
+        int nbAdditionalElevators = in.nextInt(); // ignore (always zero)
+        int nbElevators = in.nextInt(); // number of elevators
+        in.nextLine();
+        int etageBlock[] = new int[nbFloors];
+        for (int i = 0; i < nbFloors; i++) {
+            etageBlock[i] = 0;
+        }
+        System.err.println("nbFloors "+nbFloors);
+        System.err.println("width "+width);
+        System.err.println("nbRounds "+nbRounds);
+        System.err.println("exitFloor "+exitFloor);
+        System.err.println("exitPos "+exitPos);
+        System.err.println("nbTotalClones "+nbTotalClones);
+        System.err.println("nbAdditionalElevators "+nbAdditionalElevators);
+        System.err.println("nbElevators "+nbElevators);
+  
+        ArrayList<Integer> listeElevator[] = new ArrayList[nbFloors]; 
+        for (int i = 0; i < nbFloors; i++) {
+            listeElevator[i] = new ArrayList<Integer>();
+        }
+        for (int i = 0; i < nbElevators; i++) {
+            int elevatorFloor = in.nextInt(); // floor on which this elevator is found
+            listeElevator[elevatorFloor].add(in.nextInt()); // position of the elevator on its floor
+            in.nextLine();
+            System.err.println("elevatorFloor "+elevatorFloor);
+            System.err.println("Position "+listeElevator[elevatorFloor].size());
+        }
+
+        // game loop
+        while (true) {
+            int cloneFloor = in.nextInt(); // floor of the leading clone
+            int clonePos = in.nextInt(); // position of the leading clone on its floor
+            String direction = in.next(); // direction of the leading clone: LEFT or RIGHT
+            in.nextLine();
+            System.err.println("cloneFloor " +cloneFloor);
+            System.err.println("clonePos " +clonePos);
+            System.err.println("direction " +direction);
+            System.err.println("exitFloor " +exitFloor);
+            // Write an action using System.out.println()
+            // To debug: System.err.println("Debug messages...");
+            if(cloneFloor == -1){
+                System.out.println("WAIT"); // action: WAIT or BLOCK
+            }else if(listeElevator[cloneFloor].size() == 0 && nbAdditionalElevators!=0){
+                nbElevators++;
+                nbAdditionalElevators--;
+                listeElevator[cloneFloor].add(clonePos);
+                System.out.println("ELEVATOR");
+            }else if(exitFloor == cloneFloor){
+                System.err.println("EXIT etage");
+                if (etageBlock[cloneFloor] ==0 && clonePos > exitPos && "RIGHT".equalsIgnoreCase(direction)){
+                    System.out.println("BLOCK");
+                    etageBlock[cloneFloor] = 1;
+                }else if (etageBlock[cloneFloor] ==0 && clonePos < exitPos && "LEFT".equalsIgnoreCase(direction)){
+                    System.out.println("BLOCK");
+                    etageBlock[cloneFloor] = 1;
+                }else {
+                    System.out.println("WAIT"); // action: WAIT or BLOCK
+                }
+            }else {
+                System.err.println("etage FLOOR");
+                if(listeElevator[cloneFloor].size() == 1){
+                    System.err.println("elevatorPos " +listeElevator[cloneFloor].get(0));
+                    if (etageBlock[cloneFloor] ==0 && listeElevator[cloneFloor].get(0) < clonePos && "RIGHT".equalsIgnoreCase(direction)){
+                        System.out.println("BLOCK"); 
+                        etageBlock[cloneFloor] = 1;
+                    }else if (etageBlock[cloneFloor] ==0 && listeElevator[cloneFloor].get(0) > clonePos && "LEFT".equalsIgnoreCase(direction)){
+                        System.out.println("BLOCK"); 
+                        etageBlock[cloneFloor] = 1;
+                    }else {
+                        System.out.println("WAIT"); // action: WAIT or BLOCK
+                    }
+                }else{
+                    System.err.println("elevatorPos1 " +Math.abs(listeElevator[cloneFloor].get(0)-clonePos));
+                    System.err.println("elevatorPos2 " +Math.abs(listeElevator[cloneFloor].get(1)-clonePos));
+                    int minDist =100;
+                    int minPosE =0 ;
+                    for(int i=0; i<listeElevator[cloneFloor].size();i++){
+                        if(minDist > Math.abs(listeElevator[cloneFloor].get(i)-clonePos)){
+                            minDist = Math.abs(listeElevator[cloneFloor].get(i)-clonePos);
+                            minPosE = i;
+                        }
+                    }
+                    
+                    if (etageBlock[cloneFloor] ==0 && listeElevator[cloneFloor].get(minPosE) < clonePos && "RIGHT".equalsIgnoreCase(direction)){
+                        System.out.println("BLOCK"); 
+                        etageBlock[cloneFloor] = 1;
+                    }else if (etageBlock[cloneFloor] ==0 && listeElevator[cloneFloor].get(minPosE) > clonePos && "LEFT".equalsIgnoreCase(direction)){
+                        System.out.println("BLOCK"); 
+                        etageBlock[cloneFloor] = 1;
+                    }else {
+                        System.out.println("WAIT"); // action: WAIT or BLOCK
+                    }
+                    
+                }
+            }
+        }
+    }
+}
