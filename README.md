@@ -1,6 +1,15 @@
 Programme fait sur CodinGame
 =============================
 --------------------------------------
+**Communauté**
+
+1. **Text alignment**
+2. **Ils sont fous ces romains !**
+3. **Rubik**
+4. **Tester avant Valider!**
+4. **Le jeu de la vie**
+
+--------------------------------------
 **Facile**
 
 1. **ASCII Art** 

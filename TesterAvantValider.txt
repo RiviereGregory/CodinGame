@@ -1,0 +1,56 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt();
+        List<String> liste = new ArrayList<>();
+        in.nextLine();
+        for (int i = 0; i < N; i++) {
+            String action = in.nextLine();
+            liste.add(action.trim());
+            System.err.println(action);
+        }
+        System.err.println("Fin action");
+        int nbOrders = in.nextInt();
+        in.nextLine();
+        String order[] = new String[nbOrders];
+        
+        for (int i = 0; i < nbOrders; i++) {
+            order[i] = in.nextLine();
+            System.err.println("########"+order[i]);
+            boolean avant = true;
+            String[] tab = order[i].split(" before ");
+            if(tab.length<2){
+                tab = order[i].split(" after ");
+                avant = false;
+            }
+            
+            if(avant){
+                System.err.println("#avant");
+                liste.remove(liste.lastIndexOf(tab[1].trim()));
+                liste.add(liste.lastIndexOf(tab[0].trim())+1,tab[1].trim());
+            }else{
+                System.err.println("##Après ");
+                liste.remove(liste.lastIndexOf(tab[0].trim()));
+                liste.add(liste.lastIndexOf(tab[1].trim())+1,tab[0].trim());
+            }
+            
+            for(int j=0;j<liste.size();j++) System.err.println(liste.get(j));
+        }
+
+        System.err.println("Fin order ");
+        for(int i=0;i<liste.size();i++){
+            System.out.println(liste.get(i));
+        }
+
+        
+    }
+}

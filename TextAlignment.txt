@@ -1,0 +1,71 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        String alignment = in.nextLine();
+        System.err.println(alignment);
+        int N = in.nextInt();
+        in.nextLine();
+        String text[] = new String[N];
+        int maxLongueur=0;
+        for (int i = 0; i < N; i++) {
+            text[i] = in.nextLine();
+            if(text[i].length()>maxLongueur){
+                maxLongueur=text[i].length();
+            }
+        }
+
+        for (int i = 0; i < N; i++) {
+             if("LEFT".equalsIgnoreCase(alignment)){
+                 System.out.println(text[i]);
+             }else if("RIGHT".equalsIgnoreCase(alignment)){
+                 int diff = maxLongueur - text[i].length();
+                 System.out.println(nombreEspace(diff) + text[i]);
+             }else if("CENTER".equalsIgnoreCase(alignment)){
+                 int diff = maxLongueur - text[i].length();
+                 System.out.println(nombreEspace(diff/2) + text[i]);
+             }else if("JUSTIFY".equalsIgnoreCase(alignment)){
+                 int diff = maxLongueur - text[i].length();
+                 if(diff != 0){                     
+                     System.out.println(texteJustify(diff,text[i]));
+                 }else{
+                     System.out.println(text[i]);
+                 }
+             }
+             
+        }
+
+        
+    }
+    
+    public static String nombreEspace(int diff) {
+        String resultat ="";
+        for(int i=0;i<diff;i++){
+            resultat += " " ;
+        }
+        return resultat;
+    }
+    public static String texteJustify(int diff, String texte) {
+        
+        String tab[] = texte.split(" ");
+        int nbMot = tab.length;
+        //System.err.println(diff+" "+nbMot +" " +texte );
+        String nbespace = "";
+        String resultat =tab[0];
+        for(int i=0;i<diff/(nbMot-1)+1;i++){
+            nbespace += " " ;
+        }
+        for(int i=1;i<nbMot;i++){
+            resultat += nbespace + tab[i] ;
+        }
+        return resultat;
+    }
+}

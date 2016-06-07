@@ -1,0 +1,71 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int width = in.nextInt();
+        int height = in.nextInt();
+        int[][] tableau = new int[height][width];
+        int[][] tableauResultat = new int[height][width];
+        for (int i = 0; i < height; i++) {
+            String line = in.next();
+            //System.err.println(line);
+            for(int j=0; j<width; j++){
+                tableau[i][j] = Character.getNumericValue(line.charAt(j));
+            }
+        }
+        for (int i = 0; i < height; i++) {
+            for(int j=0; j<width; j++){
+                int celluleVivanteAutour = 0;
+                //System.err.println("debut " +celluleVivanteAutour);
+                if(j-1>=0){
+                    celluleVivanteAutour += tableau[i][j-1];
+                }
+                if(j+1<width){
+                    celluleVivanteAutour += tableau[i][j+1];
+                }
+                if(i-1>=0){
+                    celluleVivanteAutour += tableau[i-1][j];
+                }
+                if(i+1<height){
+                    celluleVivanteAutour += tableau[i+1][j];
+                }
+                if(i-1>=0 && j-1>=0){
+                    celluleVivanteAutour += tableau[i-1][j-1];
+                }
+                if(i-1>=0 && j+1<width){
+                    celluleVivanteAutour += tableau[i-1][j+1];
+                }
+                if(i+1<height && j-1>=0){
+                    celluleVivanteAutour += tableau[i+1][j-1];
+                }
+                if(i+1<height && j+1<width){
+                    celluleVivanteAutour += tableau[i+1][j+1];
+                }
+                //System.err.println(celluleVivanteAutour);
+                
+                if(tableau[i][j] == 1 &&(celluleVivanteAutour>=2 && celluleVivanteAutour<=3)){
+                    // System.err.println("vivante " +tableauResultat[i][j]);
+                    tableauResultat[i][j] = 1;
+                }else if(tableau[i][j] == 0 && celluleVivanteAutour==3){
+                     // System.err.println("résurection " +tableauResultat[i][j]);
+                     tableauResultat[i][j] = 1;
+                }else{
+                    // System.err.println("mort " +tableauResultat[i][j]);
+                    tableauResultat[i][j] = 0;
+                }
+                //System.err.println("Fin " +tableauResultat[i][j]);
+                System.out.print(tableauResultat[i][j]);
+            }
+            if(i < height-1) System.out.println("");
+        }
+
+    }
+}
