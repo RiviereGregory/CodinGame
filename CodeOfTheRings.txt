@@ -1,0 +1,67 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        String magicPhrase = in.nextLine();
+        int[] runes = new int[30];
+        for (int i = 0; i< magicPhrase.length();i++){            
+            char lettre = magicPhrase.charAt(i);
+            int test = lettre;
+            int nbPlus = test - 64 ;
+            if(nbPlus <0){
+                nbPlus = 0;
+            }           
+            if(i<30){
+                runes[i] = nbPlus;
+				plusMoins(nbPlus);
+            }else {
+				int coeff = i/30;
+				int nb =i-(30*coeff);
+				int nbCout = nbPlus - runes[nb];
+				
+				 plusMoins(nbCout);
+				runes[nb] = nbPlus;
+            }
+            System.out.print(".");
+            if(i< magicPhrase.length()-1){
+                System.out.print(">");
+            }
+        }
+        System.out.println("");
+    }
+	public static void plusMoins(int nbCout ){
+		if(nbCout > 0){
+			if(nbCout<14){
+                for (int j = 0; j<nbCout;j++){
+                    System.out.print("+");
+                }
+            }else if(nbCout>13){
+                int nbMoins = 27 - nbCout;
+                for (int j = 0; j<nbMoins;j++){
+                    System.out.print("-");
+                }
+            }
+		} else {
+			int nbCoutAbs = -nbCout;
+			if(nbCoutAbs<14){
+                for (int j = 0; j<nbCoutAbs;j++){
+                    System.out.print("-");
+                }
+            }else if(nbCoutAbs>13){
+                int nbMoins = 27 - nbCoutAbs;
+                for (int j = 0; j<nbMoins;j++){
+                    System.out.print("+");
+                }
+            }
+		}
+	
+	}
+}
