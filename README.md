@@ -2,7 +2,7 @@ Programme fait sur CodinGame
 =============================
 
 --------------------------------------
-**MultiJoueur Optimisation **
+**MultiJoueur Optimisation**
 
 1. **Code of the Rings**
 
