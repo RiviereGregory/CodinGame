@@ -1,0 +1,89 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int nbCandidat = in.nextInt();
+        List<String> candidats = new ArrayList<>();
+        List<String> candidatsElimine = new ArrayList<>();
+        List<Integer> numeroCandidatsElimine = new ArrayList<>();
+        List<String> votants = new ArrayList<>();
+        int[] resultat = new int[nbCandidat];
+        in.nextLine();
+        for (int i = 0; i < nbCandidat; i++) {
+            String name = in.nextLine();
+            candidats.add(name);
+            System.err.println("Nom "+name);
+        }
+        int nbVotant = in.nextInt();
+        in.nextLine();
+        for (int i = 0; i < nbVotant; i++) {
+            String votes = in.nextLine();
+            votants.add(votes);
+        }
+
+        for (int i = 0; i < nbCandidat-1; i++) {
+            for (int j = 0; j < nbVotant; j++) {
+                int numeroCandidat = Integer.parseInt(votants.get(j).substring(0,1));
+                numeroCandidat--;
+                //System.err.println("Vote candidat " +votants.get(j).substring(0,1));
+                resultat[numeroCandidat] +=1;
+            }
+            
+            int numero = 0;
+            while(numeroCandidatsElimine.contains(numero+1)){ 
+                System.err.println("test 1 "+numeroCandidatsElimine.contains(numero+1));
+                numero++;
+            }
+            System.err.println("numero "+numero);
+            int candidatMin = numero;
+            int resultMin = resultat[numero];
+            for(int j = 1; j < nbCandidat; j++) {
+                System.err.println("resultMin "+resultMin);
+                System.err.println("resultat[j]) "+resultat[j]);
+                if (resultMin > resultat[j]){
+                    //System.err.println("test "+numeroCandidatsElimine.contains(j+1));
+                    if(!numeroCandidatsElimine.contains(j+1)){
+                        resultMin = resultat[j];
+                        candidatMin = j;
+                    }
+                }
+            }
+            candidatsElimine.add(candidats.get(candidatMin));
+            candidatMin++;
+            numeroCandidatsElimine.add(candidatMin);            
+            System.err.println("candidat min "+candidatMin);
+            System.err.println("candidatsElimine "+candidatsElimine.get(i));
+            List<String> newList = new ArrayList<String>();
+            for (int j = 0; j < nbVotant; j++) {
+               
+                String candidatSup = candidatMin+" ";
+               // System.err.println("votant avant "+votants.get(j));
+                if(votants.get(j).contains(candidatSup)){
+                    newList.add(votants.get(j).replace(candidatSup,""));
+                }else {
+                    newList.add(votants.get(j).replace(candidatSup.trim(),""));
+                }
+                //System.err.println("votant "+newList.get(j));
+            }
+            votants.clear();
+            votants.addAll(newList);
+        }
+        // Write an action using System.out.println()
+        // To debug: System.err.println("Debug messages...");
+        for (int i = 0; i < candidatsElimine.size(); i++) {
+            System.out.println(candidatsElimine.get(i));
+        }
+        int numeroGagnant = Integer.parseInt(votants.get(0).substring(0,1));
+        numeroGagnant--;
+        String result = candidats.get(numeroGagnant);
+        System.out.println("winner:"+result);
+    }
+}

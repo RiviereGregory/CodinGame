@@ -7,7 +7,15 @@ Programme fait sur CodinGame
 2. **Ils sont fous ces romains !**
 3. **Rubik**
 4. **Tester avant Valider!**
-4. **Le jeu de la vie**
+5. **Le jeu de la vie**
+6. **Ancestors & Descendants**
+7. **Army ants**
+8. **Comptage de votes**
+9. **Gravité**
+10. **Le plus rapide**
+11. **Pris en excès de vitesse**
+12. **The greatest number**
+13. **Vote alternatif 75%**
 
 --------------------------------------
 **Facile**

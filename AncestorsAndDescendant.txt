@@ -1,0 +1,57 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int count = in.nextInt();
+        in.nextLine();
+        String ancien ="";
+        int compteOld =0;
+        for (int i = 0; i < count; i++) {
+            String line = in.nextLine();
+            //System.err.println("line :"+line);
+            int compte = compteCaracterePointDansChaine(line);
+            //System.err.println("comptes : "+compte);
+          if(compte == 0 && compte <= compteOld && i!=0){
+                System.out.println("");
+            }
+            if(compte == 0){
+                ancien = line;
+                System.out.print(ancien);
+            }
+            if(compte > compteOld){
+                ancien += " > "+line.substring(compte);
+                System.out.print(" > "+line.substring(compte));
+            }else  if(compte <= compteOld && compte !=0){
+                 String tmp = ancien;
+                 String[] tmpSplit = ancien.split(" > ");
+                 ancien = tmpSplit[0];
+                 for(int j=1 ; j<compte;j++){
+                     ancien += " > "+tmpSplit[j];
+                 }
+                 ancien += " > "+line.substring(compte);
+                 System.out.println("");
+                 System.out.print(ancien);
+            }
+            compteOld=compte;
+        }
+        
+    }
+    
+    public static int compteCaracterePointDansChaine(String ligne){
+        int compte = 0;
+        for(int i=0;i<ligne.length();i++){
+            if('.'==ligne.charAt(i)){
+                compte++;
+            }
+        }        
+        return compte;
+    }
+}

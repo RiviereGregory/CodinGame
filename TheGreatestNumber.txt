@@ -1,0 +1,67 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt();
+        in.nextLine();
+        String input = in.nextLine();
+        System.err.println("input "+input);
+        String[] splitInput = input.split(" ");
+        boolean minus = false;
+        boolean dot = false;
+        boolean zeros = true;
+        int nbChiffre = N;
+        List<String> chiffres = new ArrayList<>();
+        for(int i = 0; i<N;i++){
+            if(splitInput[i].equalsIgnoreCase("-")){
+                minus = true;  
+                nbChiffre--;
+                System.err.println("minus");
+            }else if(splitInput[i].equalsIgnoreCase(".")){
+                dot = true;  
+                nbChiffre--;
+                System.err.println("point");
+            }else {
+                chiffres.add(splitInput[i]);
+                if(!splitInput[i].equalsIgnoreCase("0")){
+                    zeros=false;
+                }
+            }
+           // System.err.println("splitInput " +splitInput[i]);
+        }
+        String result ="";
+        if(zeros){
+            result = "0";
+        }else{
+            if (minus){
+                Collections.sort(chiffres);
+                result +="-";
+            }else{
+                Collections.sort(chiffres,Collections.reverseOrder());
+            }
+            System.err.println(chiffres);
+            
+            for(int i = 0; i<nbChiffre;i++){
+                if(minus && dot && i==1){
+                    result +=".";
+                }
+                if(!minus && dot && i==(nbChiffre-1) && !chiffres.get(i).equalsIgnoreCase("0")){
+                    result +=".";
+                }
+                if(!(!minus && dot && i==(nbChiffre-1) && chiffres.get(i).equalsIgnoreCase("0"))){
+                    result += chiffres.get(i);
+                }                
+                
+            }
+        }
+        System.out.print(result);
+    }
+}

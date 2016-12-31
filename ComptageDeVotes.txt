@@ -1,0 +1,53 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt();
+        int M = in.nextInt();
+        List<Votant> votants = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            Votant votant = new Votant();
+            votant.nom = in.next();
+            votant.nbVote = in.nextInt();            
+            votants.add(votant);
+        }
+
+        for (int i = 0; i < M; i++) {
+            String voterName = in.next();
+            String voteValue = in.next();
+             for (int j = 0; j < N; j++) {
+                 if(votants.get(j).nom.equalsIgnoreCase(voterName)){
+                     votants.get(j).votes.add(voteValue);
+                     continue;
+                 }
+             }           
+        }
+        
+        int nbVoteYes=0;
+        int nbVoteNo=0;
+        for (int i = 0; i < N; i++) {
+            System.err.println("Taille liste "+votants.get(i).votes.size());
+            System.err.println("nbVote "+votants.get(i).nbVote);
+              if(votants.get(i).votes.size() <= votants.get(i).nbVote){
+                for (int j = 0; j < votants.get(i).votes.size(); j++) {
+                    if(votants.get(i).votes.get(j).equalsIgnoreCase("Yes")){
+                        nbVoteYes++;
+                    }else  if(votants.get(i).votes.get(j).equalsIgnoreCase("No")){
+                        nbVoteNo++;
+                    }
+                }        
+            }
+        }
+
+        System.out.println(nbVoteYes+" "+nbVoteNo);
+    }
+}
+class Votant {
+    String nom;
+    int nbVote;
+    List<String> votes = new ArrayList<>();
+}

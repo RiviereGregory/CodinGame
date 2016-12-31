@@ -1,0 +1,76 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int L = in.nextInt();
+        int N = in.nextInt();
+        in.nextLine();
+        String[] R = new String[N];
+        List<Voiture> voitures = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            R[i] = in.nextLine();
+           // System.err.println(R[i]);
+            String[] temp = R[i].split("\\s+");
+            boolean voitureTrouve = false;
+            for(int j=0; j< voitures.size(); j++){
+                if(voitures.get(j).immat.equals(temp[0])){
+                    voitures.get(j).distances.add(Integer.parseInt(temp[1])); 
+                    voitures.get(j).temps.add(Integer.parseInt(temp[2]));
+                    voitureTrouve = true;
+                }
+            }
+            if(i==0 || !voitureTrouve){
+                Voiture voiture = new Voiture();
+                voiture.immat = temp[0];
+                voiture.distances.add(Integer.parseInt(temp[1])); 
+                voiture.temps.add(Integer.parseInt(temp[2]));
+                voitures.add(voiture);
+            }
+        }
+        boolean voitureExces = false;
+        for(int j=0; j< voitures.size(); j++){
+            //System.err.println("Immat "+voitures.get(j).immat);
+            int distanceDepart = voitures.get(j).distances.get(0);
+            int tempsDepart = voitures.get(j).temps.get(0);
+             for(int i=1; i< voitures.get(j).distances.size(); i++){
+                 int distance = (voitures.get(j).distances.get(i) - distanceDepart);
+                 System.err.println("distance "+distance);
+                 double duree = (voitures.get(j).temps.get(i)-tempsDepart)/3600.00;
+                 //System.err.println("duree seconde "+(voitures.get(j).temps.get(i)-tempsDepart));
+                 //System.err.println("duree "+duree);
+                 double vitesse = distance/duree;
+                 //System.err.println("vitesse "+vitesse + " max "+L);
+                if(vitesse > L){
+                    System.out.println(voitures.get(j).immat+" " +voitures.get(j).distances.get(i));
+                    voitureExces = true;
+                }
+                distanceDepart = voitures.get(j).distances.get(i);
+                tempsDepart = voitures.get(j).temps.get(i);
+            }
+        }
+        
+        if(!voitureExces){
+            System.out.println("OK");
+        }
+        // Write an action using System.out.println()
+        // To debug: System.err.println("Debug messages...");
+
+        //System.out.println("result");
+    }
+    
+}
+class Voiture{ 
+      public String immat;
+      public List<Integer> distances = new ArrayList<>(); ;
+      public List<Integer> temps = new ArrayList<>();;
+      
+      
+   }

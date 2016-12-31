@@ -1,0 +1,49 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int width = in.nextInt();
+        int height = in.nextInt();
+        String[][] map = new String[width][height]; 
+        for (int i = 0; i < height; i++) {
+            String line = in.next();
+            for(int j=0; j<width;j++){
+                map[j][i] = Character.toString(line.charAt(j));
+                //System.err.println(map[j][i]);
+            }
+        }
+        for(int j=0; j<width;j++){
+            int dernierCaseRempli = height-1;
+            for (int i = height-1 ; i >= 0 ; i--) {
+                
+                if("#".equals(map[j][i])){
+                    //System.err.println("avant "+map[j][i]);
+                    map[j][i] = ".";
+                    //System.err.println("apres "+map[j][i]);
+                    map[j][dernierCaseRempli] = "#";
+                    //System.err.println("dernier rempli "+map[j][dernierCaseRempli]);
+                    dernierCaseRempli--;
+                    //System.err.println("dernier "+dernierCaseRempli);
+                }
+            
+            }
+        }
+        // Write an action using System.out.println()
+        // To debug: System.err.println("Debug messages...");
+        for (int i = 0; i < height; i++) {
+            for(int j=0; j<width;j++){            
+                System.out.print(map[j][i]);
+            }
+            System.out.println();
+        }
+        //System.out.println("answer");
+    }
+}

@@ -1,0 +1,52 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int N1 = in.nextInt();
+        int N2 = in.nextInt();
+        String S1 = in.next();
+        String S2 = in.next();
+        int T = in.nextInt();
+        S1 = new StringBuilder(S1).reverse().toString();
+        
+        System.err.println("N1 "+N1);
+        System.err.println("N2 "+N2);
+        System.err.println("S1 "+S1);
+        System.err.println("S2 "+S2);
+        System.err.println("T "+T);
+        char[] reponse = new char[N1+N2];
+        int positionAjout = T;
+        for(int i = N1-1;i>=0;i--){
+             int nouvellePosition = i+positionAjout;
+            if(nouvellePosition>(N2+i)){
+             nouvellePosition=N2+i   ;
+            }
+            reponse[nouvellePosition] = S1.charAt(i);
+            positionAjout--;
+            if(positionAjout<0){
+             positionAjout=0   ;
+            }
+        }
+        positionAjout = T;
+        for(int i = 0;i<N2;i++){
+            int nouvellePosition = i+N1-positionAjout;
+            if(nouvellePosition<i){
+             nouvellePosition=i   ;
+            }
+            reponse[nouvellePosition] = S2.charAt(i);
+            positionAjout--;
+            if(positionAjout<0){
+             positionAjout=0   ;
+            }
+        }
+        System.out.println(reponse);
+    }
+}

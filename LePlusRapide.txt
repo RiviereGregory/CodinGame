@@ -1,0 +1,44 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt();
+        String[] t = new String[N];
+        for (int i = 0; i < N; i++) {
+            t[i] = in.next();
+        }
+        String tempsMin=t[0];
+        for (int i = 1; i < N; i++) {
+            String[] temps1=tempsMin.split(":");
+            String[] temps2=t[i].split(":");
+            System.err.println("temps "+t[i]);
+            
+            if(Integer.parseInt(temps2[0]) < Integer.parseInt(temps1[0])){
+                tempsMin=t[i];
+                continue;
+            }else if(Integer.parseInt(temps2[0]) == Integer.parseInt(temps1[0])){
+                if(Integer.parseInt(temps2[1]) < Integer.parseInt(temps1[1])){
+                    tempsMin=t[i];
+                    continue;
+                }else if(Integer.parseInt(temps2[1]) == Integer.parseInt(temps1[1])){
+                    if(Integer.parseInt(temps2[2]) < Integer.parseInt(temps1[2])){
+                        tempsMin=t[i];
+                        continue;
+                    }
+                }
+            }
+                        
+            System.err.println("temps min "+tempsMin);
+        }
+
+        System.out.println(tempsMin);
+    }
+}
