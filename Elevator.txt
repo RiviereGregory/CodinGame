@@ -1,0 +1,65 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int a = in.nextInt();
+        int b = in.nextInt();
+        int k = in.nextInt();
+        int m = in.nextInt();
+        int nbMax =10000;
+        System.err.println("n "+n);
+        System.err.println("a "+a);
+        System.err.println("b "+b);
+        System.err.println("k "+k);
+        System.err.println("m "+m);
+        int etageEnCours = k;
+        int nbPush = 0;
+        System.err.println("etageEnCours "+etageEnCours);
+        while(etageEnCours != m){
+            if(etageEnCours<0 || etageEnCours>n){
+                 nbPush = nbMax+10;
+                 break;
+            }
+            nbPush++;
+            if(etageEnCours<m ){
+                etageEnCours += a;
+                if(etageEnCours > n){
+                    etageEnCours -= a;
+                    etageEnCours -= b;
+                }
+            }else if (etageEnCours>m){
+                etageEnCours -= b;
+                if(etageEnCours < 0){
+                    etageEnCours += b;
+                    etageEnCours += a;
+                }
+            }else{
+                 nbPush = nbMax+10;
+                 break;
+            }
+            
+            System.err.println("nbPush "+nbPush+" etageEnCours "+etageEnCours);
+            if(nbPush > nbMax){
+                break;
+            }
+        }
+
+        // Write an action using System.out.println()
+        // To debug: System.err.println("Debug messages...");
+        if(nbPush > nbMax){
+            System.out.println("IMPOSSIBLE");
+        }else{
+            System.out.println(nbPush);
+        }
+        
+    }
+}
