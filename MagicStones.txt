@@ -1,0 +1,64 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt();
+        int[] levels = new int[N];
+        for (int i = 0; i < N; i++) {
+            levels[i] = in.nextInt();
+            System.err.println("entrée "+levels[i]);
+        }
+        int nbTableau = N;
+        boolean boucle = true;
+        while(boucle){
+            
+            int[] nb=valeurDansTab(levels);
+            System.err.println(nb[0]+" - "+nb[1]);
+            if(nb[0]!=-1){
+                nbTableau--;
+                int[] levelsTmp = new int[nbTableau];
+                int j = 0;
+                 for (int i = 0; i < levels.length; i++) {
+                    if(i!=nb[0]){
+                        levelsTmp[j] = levels[i];
+                        if(i==nb[1]) levelsTmp[j] += 1;
+                        //System.err.println("tmp "+levelsTmp[j] );
+                        j++;
+                    }
+                }
+                levels=levelsTmp;
+                for(int level:levels){
+                    System.err.println("level "+level );
+                }
+            }else{
+                boucle = false;
+            }
+            
+        }
+
+        System.out.println(levels.length);
+    }
+    
+    public static int[] valeurDansTab(int[] tab){
+        int[] result = new int[2];
+        for (int j = 0; j < tab.length-1; j++) {
+            for (int i = j+1; i < tab.length; i++) {
+                if(tab[j]==tab[i]){
+                    result[0] = i;
+                    result[1] = j;
+                    return result;
+                }
+            }
+        }
+        result[0] = -1;
+       return result;
+    }
+}

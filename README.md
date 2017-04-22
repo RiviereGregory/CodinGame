@@ -29,6 +29,7 @@ Programme fait sur CodinGame
 13. **Vote alternatif 75%**
 14. **Elevator**
 15. **Highest truncated pyramid**
+16. **Magic stones**
 
 --------------------------------------
 **Facile**
