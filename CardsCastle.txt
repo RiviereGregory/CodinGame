@@ -1,0 +1,60 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int H = in.nextInt();
+        if (in.hasNextLine()) {
+            in.nextLine();
+        }
+        String S[] = new String[H];
+         for (int i = 0; i < H; i++) {
+            S[i] = in.nextLine();
+            System.err.println(S[i]);
+         }
+        boolean stable = true;
+        for (int i = 0; i < H; i++) {
+            //String S = in.nextLine();
+            
+            for (int j = 0;j<S[i].length() ;j++ ) {
+                if(S[i].charAt(j)=='/' && j<S[i].length()-1){
+                    if(S[i].charAt(j+1)!='\\'){
+                        System.out.println("UNSTABLE");
+                        stable = false;
+                        break;
+                    }
+                    if(i<H-1 && S[i+1].charAt(j)!='\\'){
+                         System.out.println("UNSTABLE");
+                        stable = false;
+                        break;
+                    }
+                }
+                if(S[i].charAt(j)=='\\' && j>0){
+                    if(S[i].charAt(j-1)!='/'){
+                        System.out.println("UNSTABLE");
+                        stable = false;
+                        break;
+                    }
+                    if(i<H-1 && S[i+1].charAt(j)!='/'){
+                         System.out.println("UNSTABLE");
+                        stable = false;
+                        break;
+                    }
+                }
+            }
+            if (!stable){
+                break;
+            }
+        }
+        if (stable){
+            System.out.println("STABLE");
+        }
+    }
+}

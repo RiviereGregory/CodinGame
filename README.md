@@ -30,6 +30,7 @@ Programme fait sur CodinGame
 14. **Elevator**
 15. **Highest truncated pyramid**
 16. **Magic stones**
+17. **Cards castle**
 
 --------------------------------------
 **Facile**
