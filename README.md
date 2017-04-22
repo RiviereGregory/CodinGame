@@ -28,6 +28,7 @@ Programme fait sur CodinGame
 12. **The greatest number**
 13. **Vote alternatif 75%**
 14. **Elevator**
+15. **Highest truncated pyramid**
 
 --------------------------------------
 **Facile**
