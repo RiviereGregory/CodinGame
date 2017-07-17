@@ -1,0 +1,101 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int factoryCount = in.nextInt(); // the number of factories
+        int linkCount = in.nextInt(); // the number of links between factories
+        int[][] liensFabrique = new int[factoryCount][factoryCount];
+        int bombe = 2;
+        System.err.println("linkCount "+linkCount);
+        for (int i = 0; i < linkCount; i++) {
+            int factory1 = in.nextInt();
+            int factory2 = in.nextInt();
+            int distance = in.nextInt();
+            liensFabrique[factory1][factory2] =distance;
+            //System.err.print("i "+i);
+            //System.err.print(" factory1 "+factory1);
+            //System.err.print(" factory2 "+factory2);
+            //System.err.print(" distance "+liensFabrique[factory1][factory2] );
+            //System.err.println();
+            
+        }
+
+        // game loop
+        while (true) {
+            int[][] Fabrique = new int[factoryCount][5];
+            List<Integer> fabriqueMoi = new ArrayList<>();
+            List<Integer> fabriqueEnnemy = new ArrayList<>();
+            List<Integer> fabriqueNeutre = new ArrayList<>();
+            int[] usineEnnemy = new int[factoryCount];
+            
+            int entityCount = in.nextInt(); // the number of entities (e.g. factories and troops)
+            int j=0;
+            for (int i = 0; i < entityCount; i++) {
+                int entityId = in.nextInt();
+                String entityType = in.next();
+                int arg1 = in.nextInt();
+                int arg2 = in.nextInt();
+                int arg3 = in.nextInt();
+                int arg4 = in.nextInt();
+                int arg5 = in.nextInt();
+                if("FACTORY".equals(entityType)){
+                    Fabrique[entityId][0]=arg1;
+                    Fabrique[entityId][1]=arg2;
+                    Fabrique[entityId][2]=arg3;
+                    Fabrique[entityId][3]=arg4;
+                    Fabrique[entityId][4]=arg5;
+                }
+                if("FACTORY".equals(entityType)){
+                    if(arg1==1){
+                        fabriqueMoi.add(entityId);
+                    }
+                     if(arg1==-1 ){
+                        fabriqueEnnemy.add(entityId);
+                    }
+                    if(arg1==0){
+                        fabriqueNeutre.add(entityId);
+                    }
+                }
+
+                //System.err.println(entityType+" "+idMinEntity+" "+nbMinCyborg);
+            }
+
+
+//for(int moi :fabriqueMoi)System.err.println("Moi "+moi);
+//for(int ennemy :fabriqueEnnemy)System.err.println("Ennemy "+ennemy);
+
+            //System.out.print("MOVE "+idMaxEntity+" "+idMinEntity+" "+cyborgEnvoye);
+             System.out.print("WAIT");
+            for(int moi :fabriqueMoi){
+                for(int ennemy :fabriqueEnnemy){
+                   if(Fabrique[ennemy][1] > 10 && bombe >0){
+                        System.out.print(";BOMB "+moi+" "+ennemy);
+                    }
+                    int cyborgEnvoye = 0;
+                    if(Fabrique[ennemy][1] <Fabrique[moi][1]){
+                        cyborgEnvoye +=Fabrique[ennemy][1]+1;
+                    }else {
+                        cyborgEnvoye += 2;
+                    }
+                    System.out.print(";MOVE "+moi+" "+ennemy+" "+cyborgEnvoye);
+                }
+                for(int ennemy :fabriqueNeutre){
+                    if(Fabrique[ennemy][1] <Fabrique[moi][1]){
+                        int cyborgEnvoye =Fabrique[ennemy][1] +1;
+                        System.out.print(";MOVE "+moi+" "+ennemy+" "+cyborgEnvoye);
+                    }
+                }
+            }
+            System.out.println();
+
+        }
+    }
+}

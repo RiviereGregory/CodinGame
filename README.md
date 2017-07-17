@@ -5,6 +5,7 @@ Programme fait sur CodinGame
 **MultiJoueur Optimisation**
 
 1. **Code of the Rings**
+2. **Ghost in the cell**
 
 --------------------------------------
 **Machine Learning**
