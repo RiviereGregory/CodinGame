@@ -1,0 +1,62 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int opponentCount = in.nextInt(); // Opponent count
+        int xCarte = 35;
+        int yCarte = 20;
+        boolean sensXMoins = true;
+        boolean sensYMoins = true;
+        int xRef =0;
+        int yRef =0;
+        boolean premiertour = true;
+        Random randomGenerator = new Random();
+        int randomX = randomGenerator.nextInt(xCarte);
+        int randomY = randomGenerator.nextInt(yCarte);
+        // game loop
+        while (true) {
+            int gameRound = in.nextInt();
+            int x = in.nextInt(); // Your x position
+            int y = in.nextInt(); // Your y position
+            if (premiertour){
+                xRef = x;
+                yRef = y;
+                premiertour = false;
+            }
+            System.err.println(x +" "+ y);
+            int backInTimeLeft = in.nextInt(); // Remaining back in time
+            for (int i = 0; i < opponentCount; i++) {
+                int opponentX = in.nextInt(); // X position of the opponent
+                int opponentY = in.nextInt(); // Y position of the opponent
+                int opponentBackInTimeLeft = in.nextInt(); // Remaining back in time of the opponent
+            }
+            String[][] carte = new String[yCarte][xCarte];
+            for (int i = 0; i < yCarte; i++) {
+                String line = in.next(); // One line of the map ('.' = free, '0' = you, otherwise the id of the opponent)
+                
+                for(int j =0; j<xCarte;j++){
+                    carte[i][j] = line.substring(j,j+1);
+                    //System.err.print(carte[i][j]);
+                }
+                //System.err.println("");
+            }
+            if(x ==randomX && y == randomY){
+             randomX = randomGenerator.nextInt(xCarte);
+             randomY = randomGenerator.nextInt(yCarte);
+            }
+            System.err.println("X rand " + randomX);
+            System.err.println("Y rand " + randomY);
+            
+            System.err.println(carte[y][x]);
+            System.out.println(randomX +" "+ randomY);
+        }
+    }
+}
