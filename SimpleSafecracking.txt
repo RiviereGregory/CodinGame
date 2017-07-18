@@ -1,0 +1,40 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        String msg = in.nextLine();
+        System.err.println(msg);
+        String msgSplit[] = msg.split(": ");
+        System.err.println(msgSplit[0]);
+        System.err.println(msgSplit[1]);
+        String code[] = msgSplit[1].split("-");
+        for(String mot : code){
+            //System.err.println(mot);
+            System.out.print(decode(mot, msgSplit[0]));
+        }
+
+        //System.out.println("solution");
+    }
+    
+    public static int decode(String word, String msgs){
+        if (word.length() == 4 && word.charAt(1) == msgs.charAt(2) )  return 0;
+        if (word.length() == 3 && word.charAt(0) == msgs.charAt(18)) return 1;
+        if (word.length() == 3 && word.charAt(0) == msgs.charAt(16)) return 2;
+        if (word.length() == 5 && word.charAt(0) == msgs.charAt(16)) return 3;
+        if (word.length() == 4 && word.charAt(1) == msgs.charAt(18)) return 4;
+        if (word.length() == 4 && word.charAt(0) == msgs.charAt(6))  return 5;
+        if (word.length() == 3 && word.charAt(0) == msgs.charAt(22)) return 6;
+        if (word.length() == 5 && word.charAt(0) == msgs.charAt(22)) return 7;
+        if (word.length() == 5 && word.charAt(0) == msgs.charAt(2))  return 8;
+        if (word.length() == 4 && word.charAt(3) == msgs.charAt(7))  return 9;
+        return 0;
+    }
+}

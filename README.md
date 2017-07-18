@@ -7,6 +7,7 @@ Programme fait sur CodinGame
 1. **Code of the Rings**
 2. **Ghost in the cell**
 3. **Back to the code**
+4. **Pocker Chip Race**
 
 --------------------------------------
 **Machine Learning**
@@ -33,6 +34,7 @@ Programme fait sur CodinGame
 15. **Highest truncated pyramid**
 16. **Magic stones**
 17. **Cards castle**
+18. **Simple Safecracking**
 
 --------------------------------------
 **Facile**

@@ -1,0 +1,78 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * It's the survival of the biggest!
+ * Propel your chips across a frictionless table top to avoid getting eaten by bigger foes.
+ * Aim for smaller oil droplets for an easy size boost.
+ * Tip: merging your chips will give you a sizeable advantage.
+ **/
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int playerId = in.nextInt(); // your id (0 to 4)
+        
+System.err.println(playerId);
+        // game loop
+        while (true) {
+            List<Info> autre = new ArrayList<>();
+            List<Info> ennemy = new ArrayList<>();
+            List<Info> moi = new ArrayList<>();
+            int playerChipCount = in.nextInt(); // The number of chips under your control
+            int entityCount = in.nextInt(); // The total number of entities on the table, including your chips
+            System.err.println(playerChipCount+" "+entityCount);
+            for (int i = 0; i < entityCount; i++) {
+                int id = in.nextInt(); // Unique identifier for this entity
+                int player = in.nextInt(); // The owner of this entity (-1 for neutral droplets)
+                float radius = in.nextFloat(); // the radius of this entity
+                float x = in.nextFloat(); // the X coordinate (0 to 799)
+                float y = in.nextFloat(); // the Y coordinate (0 to 514)
+                float vx = in.nextFloat(); // the speed of this entity along the X axis
+                float vy = in.nextFloat(); // the speed of this entity along the Y axis
+                Info entity = new Info();
+                entity.radius = radius;
+                entity.x = x+vx;
+                entity.y = y+vy;
+                if(player == -1){
+                    autre.add(entity);
+                }else if (playerId == player){
+                    moi.add(entity);
+                    System.err.println("moi");
+                }else{
+                    ennemy.add(entity);
+                }
+                
+                System.err.println(id+" "+player+" "+radius+" "+x+" "+y+" "+vx+" "+vy);
+            }
+            for (int i = 0; i < playerChipCount; i++) {
+                System.err.println(i);
+                System.err.println("taille liste "+moi.size());
+                Info moiNow = moi.get(i);
+                for (Info enemy : ennemy){
+                    if (moiNow.radius > (enemy.radius+enemy.radius/12)) {
+                        System.out.println(enemy.x+" "+enemy.y);
+                    }else{
+                       for (Info enemy1 : autre){
+                            if (moiNow.radius > (enemy1.radius+enemy1.radius/12)) {
+                                System.out.println(enemy1.x+" "+enemy1.y);
+                            }else{
+                                System.out.println("WAIT");
+                            }
+                        }
+                    }
+                }
+                
+                
+            }
+        }
+    }
+}
+
+class Info{
+    float radius;
+    float x;
+    float y;
+    
+}
