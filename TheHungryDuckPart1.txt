@@ -1,0 +1,58 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int W = in.nextInt();
+        int H = in.nextInt();
+        //System.err.println("H "+H+" W "+W);
+        int food[][] = new int[W][H] ;
+        for (int i = 0; i < H; i++) {
+            for (int j = 0; j < W; j++) {
+               food[j][i] = in.nextInt();
+               //System.err.print(food[j][i]);
+            }
+            //System.err.println();
+        }
+        
+        for (int i = 0; i < H; i++) {
+            for (int j = 0; j < W; j++) {
+               if(i==0){
+                   if(j==0){
+                       food[j][i] = food[j][i] ;
+                   }else{
+                       food[j][i] = food[j-1][i] + food[j][i] ;
+                   }
+               }
+               if(j==0){
+                    if(i==0){
+                       food[j][i] = food[j][i] ;
+                   }else{
+                       food[j][i] = food[j][i-1] + food[j][i] ;
+                   }
+               }
+               
+               if(j!=0 && i!=0){
+                   int basTmp = food[j][i-1] + food[j][i] ;
+                   int droiteTmp = food[j-1][i] + food[j][i] ;
+                   if(basTmp < droiteTmp){
+                       food[j][i] = food[j-1][i] + food[j][i] ;
+                   }else {
+                       food[j][i] = food[j][i-1] + food[j][i] ;
+                   }
+               }
+               //System.err.print(food[j][i]);
+            }
+            //System.err.println();
+        }
+       
+        System.out.println(food[W-1][H-1]);
+    }
+}
