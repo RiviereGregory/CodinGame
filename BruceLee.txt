@@ -1,0 +1,58 @@
+// Read inputs from System.in, Write outputs to System.out.
+// Your class name has to be Solution
+
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+class Solution {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+		String line = in.nextLine();
+		System.err.println(line);
+		boolean invalid = false;
+		String nouvelleLine = "";
+		
+		String[] splitLine = line.split(" ");
+		System.err.println(splitLine.length);
+		if(splitLine.length%2 == 0){
+    		for(int i = 0; i<splitLine.length; i+=2){
+    		    if("0".equals(splitLine[i])){
+    		        for(int j = 0; j < splitLine[i+1].length(); j++){
+    		            nouvelleLine+="1";
+    		        }
+    		        
+    		    }else if("00".equals(splitLine[i])){
+    		        for(int j = 0; j < splitLine[i+1].length(); j++){
+    		            nouvelleLine+="0";
+    		        }
+    		    } else {
+    		        invalid = true;
+    		    }
+    		}
+    		System.err.println(nouvelleLine);
+		}else {
+		   invalid = true;
+		}
+		if(nouvelleLine.length()%7 == 0 && !invalid){
+		    System.out.println(getAsciiBytes(nouvelleLine));
+		}else {
+		    System.out.println("INVALID");
+		}
+	
+	}
+	
+public static String getAsciiBytes(String input)
+  {
+
+    String output = "";
+    for(int i = 0; i < input.length(); i+=7)
+    {
+        int k = Integer.parseInt(input.substring(i, i+7), 2);
+        output += (char) k;
+    }   
+    return output;
+  }
+	
+}

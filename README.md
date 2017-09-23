@@ -36,6 +36,7 @@ Programme fait sur CodinGame
 17. **Cards castle**
 18. **Simple Safecracking**
 19. **The Hungry Duck Part1**
+20. **Bruce Lee**
 
 --------------------------------------
 **Facile**
