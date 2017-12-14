@@ -37,6 +37,7 @@ Programme fait sur CodinGame
 18. **Simple Safecracking**
 19. **The Hungry Duck Part1**
 20. **Bruce Lee**
+21. **hangman**
 
 --------------------------------------
 **Facile**

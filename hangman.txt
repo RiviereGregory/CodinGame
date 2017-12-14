@@ -1,0 +1,116 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        String word = in.nextLine();
+        String chars = in.nextLine();
+        String[] charater = chars.split(" ");
+        System.err.println(charater.length);
+        char[] resultat = new char[word.length()];
+        for(int i = 0 ;i< word.length();i++ ){
+            resultat[i]='_';
+        }
+        int error = 0;
+        String wordLower = word.toLowerCase();
+        System.err.println("word "+word);
+        System.err.println("chars "+chars);
+        String solu="";
+        if(wordLower.contains(" ")){
+            int pos1 = 0;
+                int tour = 0;
+                do{
+                    if(tour == 0){
+                        pos1= wordLower.indexOf(" ");
+                        tour++;
+                    }else{
+                        pos1= wordLower.indexOf(" ",pos1+1);
+                    }
+                    
+                    if(pos1 != -1){
+                        resultat[pos1]=' ';
+                    }
+                }while(pos1 != -1);
+        }
+
+        for(String mot : charater){
+             if(wordLower.contains(mot) && !solu.contains(mot)){
+                int pos1 = 0;
+                int tour = 0;
+                do{
+                    if(tour == 0){
+                        pos1= wordLower.indexOf(mot);
+                        tour++;
+                    }else{
+                        pos1= wordLower.indexOf(mot,pos1+1);
+                    }
+                    
+                    if(pos1 != -1){
+                        resultat[pos1] = word.charAt(pos1);
+                    }
+                }while(pos1 != -1);
+            }else{
+                error++;
+            }
+            solu += mot;
+            if(error>6) break;
+        }
+
+        result(error);
+        System.out.println(resultat);
+    }
+    
+    public static void result(int error){
+        System.out.println("+--+");
+        StringBuilder builder0 = new StringBuilder();
+        StringBuilder builder1 = new StringBuilder();
+        StringBuilder builder2 = new StringBuilder();
+        builder0.append("|");
+        builder1.append("|");
+        builder2.append("|\\");
+        switch(error){
+            case 1 :
+                builder0.append("  o");
+                break;
+            case 2 :
+                builder0.append("  o");
+                builder1.append("  |");
+                break;
+            case 3 :
+                builder0.append("  o");
+                builder1.append(" /|");
+                break;
+            case 4 :
+                builder0.append("  o");
+                builder1.append(" /|");
+                builder1.append('\\');
+                break;
+            case 5 :
+                builder0.append("  o");
+                builder1.append(" /|");
+                builder1.append('\\');
+                builder2.append('/');
+                break;
+            case 6 :
+                builder0.append("  o");
+                builder1.append(" /|");
+                builder1.append('\\');
+                builder2.append('/');
+                builder2.append(' ');
+                builder2.append('\\');
+                break;
+            default:
+                break;
+        }
+        System.out.println(builder0.toString());
+        System.out.println(builder1.toString());
+        System.out.println(builder2.toString());
+    }
+}
