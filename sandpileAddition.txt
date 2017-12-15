@@ -1,0 +1,103 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        if (in.hasNextLine()) {
+            in.nextLine();
+        }
+        int[][] row1 = new int[n][n];
+        int[][] row2 = new int[n][n];
+        int[][] rowAdd = new int[n][n];
+        int[][] rowResult = new int[n][n];
+        System.err.println("Row1");
+        for (int i = 0; i < n; i++) {
+            String row = in.nextLine();
+            //System.err.println("row1 "+ row);
+            for (int j = 0; j < n; j++) {
+                row1[i][j] = Character.getNumericValue(row.charAt(j));
+                System.err.print(row1[i][j]);
+            }
+            System.err.println("");
+        }
+         System.err.println("Row2");
+        for (int i = 0; i < n; i++) {
+             String row = in.nextLine();
+            //System.err.println("row1 "+ row);
+            for (int j = 0; j < n; j++) {
+                row2[i][j] = Character.getNumericValue(row.charAt(j));
+                System.err.print(row2[i][j]);
+            }
+            System.err.println("");
+
+        }
+        //System.err.println("somme");
+        rowAdd = somme(row1,row2,n);
+        rowResult = distributes(rowAdd,n);
+        System.err.println("rowResult");
+         for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print(rowResult[i][j]);
+            }
+            System.out.println("");
+
+        }
+    }
+    
+    public static int[][] somme(int[][] row1, int[][] row2, int n){
+        int[][] rowAdd = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int somme = row2[i][j] +row1[i][j] ;
+               //System.err.println("somme "+ somme);
+                rowAdd[i][j] = somme;
+               //System.err.print(rowAdd[i][j]);
+            }
+            //System.err.println("");
+
+        }
+        return rowAdd;
+        
+    }
+    public static int[][] distributes(int[][] rowAdd, int n){
+        boolean four = false;
+        do{
+            four = false;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    int valeur = rowAdd[i][j];
+                   // System.err.println("i "+i+" j "+j+" v "+valeur);
+                    if(valeur > 3){
+                        four = true;
+                        rowAdd[i][j] = valeur-4;
+                        if(i-1 >=0){
+                            rowAdd[i-1][j] += 1;
+                        }
+                        if(i+1<n){
+                            rowAdd[i+1][j] += 1;
+                        }
+                        if(j-1 >=0){
+                            rowAdd[i][j-1] += 1;
+                        }
+                        if(j+1 <n){
+                            rowAdd[i][j+1] += 1;
+                        }
+                        
+                    }else{
+                        rowAdd[i][j] = valeur;
+                    }
+                }
+            }
+        }while(four);
+        return rowAdd;
+        
+    }
+}
