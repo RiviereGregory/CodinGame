@@ -39,6 +39,7 @@ Programme fait sur CodinGame
 20. **Bruce Lee**
 21. **hangman**
 22. **sandpileAddition**
+23. **Bingo!**
 
 --------------------------------------
 **Facile**

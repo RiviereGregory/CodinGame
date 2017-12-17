@@ -1,0 +1,197 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+import java.util.stream.Collectors;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Solution {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        if (in.hasNextLine()) {
+            in.nextLine();
+        }
+        List <Card> cards = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            String row = in.nextLine();
+            List<Integer> line1 = Arrays.stream(row.split(" ")).map((x)
+                -> Integer.parseInt(x)).collect(Collectors.toList());
+            row = in.nextLine();
+            List<Integer> line2 = Arrays.stream(row.split(" ")).map((x)
+                -> Integer.parseInt(x)).collect(Collectors.toList());
+            row = in.nextLine();
+            List<Integer> line3 = Arrays.stream(row.split(" ")).map((x)
+                -> Integer.parseInt(x)).collect(Collectors.toList());
+            row = in.nextLine();
+            List<Integer> line4 = Arrays.stream(row.split(" ")).map((x)
+                -> Integer.parseInt(x)).collect(Collectors.toList());
+            row = in.nextLine();
+            List<Integer> line5 = Arrays.stream(row.split(" ")).map((x)
+                -> Integer.parseInt(x)).collect(Collectors.toList());
+            List<Integer> col1 = new ArrayList<Integer>();
+            col1.add(line1.get(0));col1.add(line2.get(0));col1.add(line3.get(0));col1.add(line4.get(0));col1.add(line5.get(0));
+            List<Integer> col2 = new ArrayList<Integer>();
+			col2.add(line1.get(1));col2.add(line2.get(1));col2.add(line3.get(1));col2.add(line4.get(1));col2.add(line5.get(1));
+            List<Integer> col3 = new ArrayList<Integer>();
+			col3.add(line1.get(2));col3.add(line2.get(2));col3.add(line3.get(2));col3.add(line4.get(2));col3.add(line5.get(2));
+            List<Integer> col4 = new ArrayList<Integer>();
+			col4.add(line1.get(3));col4.add(line2.get(3));col4.add(line3.get(3));col4.add(line4.get(3));col4.add(line5.get(3));
+            List<Integer> col5 = new ArrayList<Integer>();
+			col5.add(line1.get(4));col5.add(line2.get(4));col5.add(line3.get(4));col5.add(line4.get(4));col5.add(line5.get(4));
+            List<Integer> diag1 = new ArrayList<Integer>();
+			diag1.add(line1.get(0));diag1.add(line2.get(1));diag1.add(line3.get(2));diag1.add(line4.get(3));diag1.add(line5.get(4));
+            List<Integer> diag2 = new ArrayList<Integer>();
+			diag2.add(line1.get(4));diag2.add(line2.get(3));diag2.add(line3.get(2));diag2.add(line4.get(1));diag2.add(line5.get(0));
+            cards.add(new Card(line1,line2,line3,line4,line5,col1,col2,col3,col4,col5,diag1,diag2));
+        }
+        String row = in.nextLine();
+        List<Integer> calls = Arrays.stream(row.split(" ")).map((x)
+                -> Integer.parseInt(x)).collect(Collectors.toList());
+       // System.err.println(row);
+        //System.err.println(calls);
+        Integer min = 100;
+        
+        Integer cartonPlein = 200;
+        for(Card carte : cards){
+            Integer max = 0;
+            //carte.toAffiche();
+            int minLine = carte.completeLine(carte.line1,calls);
+            max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine = carte.completeLine(carte.line2,calls);
+            max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine = carte.completeLine(carte.line3,calls);
+            max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine= carte.completeLine(carte.line4,calls);
+            max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine = carte.completeLine(carte.line5,calls);
+            max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine = carte.completeLine(carte.col1,calls);
+            //max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine = carte.completeLine(carte.col2,calls);
+            //max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine = carte.completeLine(carte.col3,calls);
+            //max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine = carte.completeLine(carte.col4,calls);
+            //max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine = carte.completeLine(carte.col5,calls);
+            //max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine = carte.completeLine(carte.diag1,calls);
+            //max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            minLine = carte.completeLine(carte.diag2,calls);
+            //max = getMax(minLine, max);
+            min = getMin(minLine, min);
+            
+            if(cartonPlein > max){
+                cartonPlein = max;
+            }
+
+            System.err.println("Min " +min);
+            System.err.println("Max " +max);
+            System.err.println("Carte :");
+           System.err.println(carte.line1);
+            System.err.println(carte.line2);
+            System.err.println(carte.line3);
+            System.err.println(carte.line4);
+            System.err.println(carte.line5);
+        }
+
+        // Write an action using System.out.println()
+        // To debug: System.err.println("Debug messages...");
+
+        System.out.println(min);
+        System.out.println(cartonPlein);
+    }
+    
+    public static Integer getMax(Integer value, Integer max){
+        if(value > max){
+                return value;
+        }
+        return max;
+    }
+    public static Integer getMin(Integer value, Integer min){
+        if(value < min){
+                return value;
+        }
+        return min;
+    }
+    
+    static class Card {
+        public List<Integer> line1;
+        public List<Integer> line2;
+        public List<Integer> line3;
+        public List<Integer> line4;
+        public List<Integer> line5;
+        public List<Integer> col1;
+        public List<Integer> col2;
+        public List<Integer> col3;
+        public List<Integer> col4;
+        public List<Integer> col5;
+        public List<Integer> diag1;
+        public List<Integer> diag2;
+        
+        public Card (List<Integer> line1, List<Integer> line2, List<Integer> line3,
+            List<Integer> line4, List<Integer> line5,List<Integer> col1, List<Integer> col2, List<Integer> col3,
+            List<Integer> col4, List<Integer> col5, List<Integer> diag1, List<Integer> diag2){
+                this.line1 = line1;
+                this.line2 = line2;
+                this.line3 = line3;
+                this.line4 = line4;
+                this.line5 = line5;
+                this.col1 = col1;
+                this.col2 = col2;
+                this.col3 = col3;
+                this.col4 = col4;
+                this.col5 = col5;
+                this.diag1 = diag1;
+                this.diag2 = diag2;
+            }
+            public void toAffiche(){
+                System.err.println("Line 1 "+line1);
+                System.err.println("Line 2 "+line2);
+                System.err.println("Line 3 "+line3);
+                System.err.println("Line 4 "+line4);
+                System.err.println("Line 5 "+line5);
+                System.err.println("col1 "+col1);
+                System.err.println("col2 "+col2);
+                System.err.println("col3 "+col3);
+                System.err.println("col4 "+col4);
+                System.err.println("col5 "+col5);
+                System.err.println("diag1 "+diag1);
+                System.err.println("diag2 "+diag2);
+            }
+        public Integer completeLine(List<Integer> line1,List<Integer> calls){
+            int numero = 0;
+            if(line1.contains(0)){
+                numero = 1;
+            }
+            int numbersCall = 0;
+            for(Integer number : calls){
+                //System.err.print(number +" ");
+                numbersCall++;
+                if(line1.contains(number)){
+                    numero++;
+                    if(numero == 5){
+                        break;
+                    }
+                }
+            }
+            //System.err.println(" nb appel "+numbersCall +" ");
+            return numbersCall;
+        }
+    }
+}
