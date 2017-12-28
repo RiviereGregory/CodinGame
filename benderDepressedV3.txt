@@ -206,7 +206,6 @@ class Bender {
 	int posY;
 	Character[][] carte;
 	int teleport[][];
-	int etatOrientation = 0;
 	Character orientation = 'S';
 	boolean modeCasseur = false;
 	boolean modeInverseur = false;
@@ -219,12 +218,9 @@ class Bender {
 			if (this.boucle == 0) {
 				if (!this.modeInverseur) {
 					this.modeInverseur = true;
-					//this.orientation = 'W';
 				} else if (this.modeInverseur) {
 					this.modeInverseur = false;
-					//this.orientation = 'S';
 				}
-				this.etatOrientation = 7 - this.etatOrientation;
 			}
 			break;
 		case 'T':
@@ -249,19 +245,15 @@ class Bender {
 			}
 			break;
 		case 'S':
-			this.etatOrientation = 0;
 			this.orientation  = 'S';
 			break;
 		case 'N':
-			this.etatOrientation = 2;
 			this.orientation  = 'N';
 			break;
 		case 'E':
-			this.etatOrientation = 1;
 			this.orientation  = 'E';
 			break;
 		case 'W':
-			this.etatOrientation = 3;
 			this.orientation  = 'W';
 			break;
 		case '$':
