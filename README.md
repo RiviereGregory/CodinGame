@@ -40,6 +40,7 @@ Programme fait sur CodinGame
 21. **hangman**
 22. **sandpileAddition**
 23. **Bingo!**
+24. **Egyptian Multiplication**
 
 --------------------------------------
 **Facile**
