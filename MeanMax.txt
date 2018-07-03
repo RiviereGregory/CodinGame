@@ -1,0 +1,189 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+		Vehicule reaper = new Vehicule();
+		Vehicule reaper1 = new Vehicule();
+		Vehicule reaper2 = new Vehicule();
+		Vehicule destroyer = new Vehicule();
+		Vehicule destroyer1 = new Vehicule();
+		Vehicule destroyer2 = new Vehicule();
+		Vehicule doof = new Vehicule();
+		Vehicule doof1 = new Vehicule();
+		Vehicule doof2 = new Vehicule();
+		int diffTmp = 100000;
+        int diffTmpT = 100000;
+        int diffTmpS = 100000;
+        // game loop
+        while (true) {
+            boolean isEpave = false;
+            boolean isTanker = false;
+            boolean isSkill = false;
+            int myScore = in.nextInt();
+            int enemyScore1 = in.nextInt();
+            int enemyScore2 = in.nextInt();
+            int myRage = in.nextInt();
+            int enemyRage1 = in.nextInt();
+            int enemyRage2 = in.nextInt();
+            int unitCount = in.nextInt();
+            //System.err.println("myScore "+myScore+" enemyScore1 "+enemyScore1);
+            //System.err.println("enemyScore2 "+enemyScore2+" myRage "+myRage);
+            //System.err.println("enemyRage1 "+enemyRage1+" enemyRage2 "+enemyRage2);
+            //System.err.println("unitCount "+unitCount);            
+            int diff=100000;
+            int diffT=100000;
+            int diffS=100000;
+            for (int i = 0; i < unitCount; i++) {
+                int unitId = in.nextInt();
+                int unitType = in.nextInt();
+                int player = in.nextInt();
+                float mass = in.nextFloat();
+                int radius = in.nextInt();
+                int x = in.nextInt();
+                int y = in.nextInt();
+                int vx = in.nextInt();
+                int vy = in.nextInt();
+                int extra = in.nextInt();
+                int extra2 = in.nextInt();
+                if(player==0){
+                    if (unitType == 0){
+                        reaper.x=x;
+                        reaper.y=y;
+                        reaper.score=myScore;
+                    }
+                    if (unitType == 1){
+                        destroyer.x=x;
+                        destroyer.y=y;
+                    }
+					if(unitType == 2){
+						doof.x=x;
+						doof.y=y;
+					}
+                }else if(player==1){
+                    if (unitType == 0){
+                        reaper1.x=x;
+                        reaper1.y=y;
+                        reaper1.score=enemyScore1;
+                    }
+                    if (unitType == 1){
+                        destroyer1.x=x;
+                        destroyer1.y=y;
+                    }
+					if(unitType == 2){
+						doof1.x=x;
+						doof1.y=y;
+					}
+                }
+                else if(player==2){
+                    if (unitType == 0){
+                        reaper2.x=x;
+                        reaper2.y=y;
+                        reaper2.score=enemyScore2;
+                    }
+                    if (unitType == 1){
+                        destroyer2.x=x;
+                        destroyer2.y=y;
+                    }
+					if(unitType == 2){
+						doof2.x=x;
+						doof2.y=y;
+					}
+                }
+                if(!isSkill && (player==1 || player == 2)){
+                    isSkill = isProche(x,y, reaper.x, reaper.y);
+                }
+                if (unitType == 4 && extra > 0){
+                    diffTmp = Math.abs(reaper.x-x) + Math.abs(reaper.y-y);
+                }
+                if (unitType == 3 && extra > 0){
+                    diffTmpT = Math.abs(destroyer.x-x) + Math.abs(destroyer.y-y);
+                }
+                
+                
+            //System.err.println("unitId "+unitId +" unitType "+unitType+" player "+player));
+            //System.err.println("mass "+mass+" radius "+radius+" x "+x+" y "+y);
+           //System.err.println("vx "+vx+" vy "+vy+" extra "+extra+" extra2 "+extra2);
+                if (unitType == 4 && extra > 0 && diffTmp < diff){
+                    reaper.xDestination=x;
+                    reaper.yDestination=y;
+                    diff = diffTmp;
+                    isEpave = true;
+                }
+                if (unitType == 3 && extra > 0 && diffTmpT < diffT){
+                    destroyer.xDestination=x;
+                    destroyer.yDestination=y;
+                    diffT = diffTmpT;
+                    isTanker = true;
+                }
+            }
+            // Write an action using System.out.println()
+           if(!isEpave){
+                System.out.println("WAIT");
+            }else {
+                System.out.println(reaper.xDestination +" "+reaper.yDestination+" "+300);
+            }
+            if (isSkill && myRage > 60 && reaper.distance()<100){
+                 System.out.println("SKILL "+reaper.x +" "+reaper.y);
+            }else if(!isTanker){
+                System.out.println("WAIT");
+            }else{
+                System.out.println(destroyer.xDestination +" "+destroyer.yDestination+" "+300);
+            }
+            doof.xDestination = (destroyer.xDestination+reaper.xDestination)/2;
+            doof.yDestination = (destroyer.yDestination+reaper.yDestination)/2;
+            if (myRage > 60 && reaper.distance(reaper1) > 2000
+                    && reaper.score < reaper1.score 
+                    && reaper2.score < reaper1.score){
+                System.out.println("SKILL "+reaper1.x +" "+reaper1.y);
+            }else if ( myRage > 60 && reaper.distance(reaper2) > 2000
+                    && reaper.score < reaper2.score){
+                System.out.println("SKILL "+reaper2.x +" "+reaper2.y);
+            }else {
+                System.out.println(doof.xDestination +" "+doof.yDestination+" "+300);
+            }
+            
+        }
+    }
+	public static boolean isProche(int x,int y, int xMe, int yMe){
+		double rayon = 2000;
+		double point = Math.sqrt(Math.pow((x-xMe),2.0)+Math.pow((y-yMe),2.0));
+		if (point < rayon) return true;
+		return false;
+	}
+    
+}
+class Vehicule{
+        public int x;
+        public int y;
+		public int xDestination;
+        public int yDestination;
+        int score;
+        
+        public double distance(){
+            return Math.sqrt(Math.pow((this.x-this.xDestination),2.0)+
+                Math.pow((this.y-this.yDestination),2.0));
+        }
+        public double distance(Vehicule vehicule){
+            return Math.sqrt(Math.pow((this.x-vehicule.x),2.0)+
+                Math.pow((this.y-vehicule.y),2.0));
+        }
+        public int vitesse(){
+            double dist = distance();
+            if (dist < 500){
+                return 50;
+            }else if (dist < 2000){
+                return 150;
+            }else if (dist < 5000){
+                return 250;
+            }
+            return 300;
+        }
+    }
