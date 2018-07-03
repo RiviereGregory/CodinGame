@@ -2,7 +2,7 @@ Programme fait sur CodinGame
 =============================
 
 --------------------------------------
-**MultiJoueur Optimisation**
+**Challenges**
 
 1. **Mean Max**
 2. **Botters of the Galaxy**
