@@ -57,6 +57,7 @@ class Player {
                 String possibleAction = in.nextLine(); // try printing something from here to start with
                 if (!"WAIT".equals(possibleAction)) {
                     actionPossibles.add(possibleAction);
+                    System.err.println(possibleAction);
                 }
             }
             List<Tree> trees = treeList.stream().filter(tree -> tree.isMine).collect(Collectors.toList());
@@ -81,7 +82,9 @@ class Player {
                     }
                 }
             }
-
+            if (!actionPossibles.isEmpty() && !actionPossibles.contains(message)){
+                message = actionPossibles.get(0);
+            }
 
             // Write an action using System.out.println()
             // To debug: System.err.println("Debug messages...");
