@@ -40,7 +40,11 @@ class Player {
         // game loop
         while (true) {
             StringBuilder stringBuilder = null;
-            int nextCell = myBases.get(0);
+            List<Cell> cellsResources = new ArrayList<>();
+            int myCellBase = myBases.get(0);
+            int maxResources = 0;
+            int iCellResources = 0;
+            int iMaxResources = 0;
             for (int i = 0; i < numberOfCells; i++) {
                 int resources = in.nextInt(); // the current amount of eggs/crystals on this cell
                 int myAnts = in.nextInt(); // the amount of your ants on this cell
@@ -48,16 +52,28 @@ class Player {
                 cells.get(i).resources = resources;
                 cells.get(i).myAnts = myAnts;
                 cells.get(i).oppAnts = oppAnts;
-                System.err.println(cells.get(i));
-                System.err.println("Types = " + cells.get(i).cellType + " resources = " + resources);
+//                System.err.println(cells.get(i));
+//                System.err.println("Types = " + cells.get(i).cellType + " resources = " + resources);
                 boolean isOppAntBase = oppBases.contains(i);
-                if (!isOppAntBase && cells.get(i).cellType == 2 && resources != 0) {
+                if (!isOppAntBase && cells.get(i).cellType != 0 && resources != 0) {
+                    cellsResources.add(cells.get(i));
+                    if (maxResources < resources) {
+                        iMaxResources = iCellResources;
+                        maxResources = resources;
+                    }
+                    iCellResources++;
+                }
+            }
+            if (!cellsResources.isEmpty()) {
+                for (int i = 0; i < cellsResources.size(); i++) {
+                    int strength = 1;
+                    if (i == iMaxResources) {
+                        strength = 2;
+                    }
                     if (stringBuilder == null) {
-                        stringBuilder = new StringBuilder("LINE " + nextCell + " " + i + " 1");
-                        nextCell = i;
+                        stringBuilder = new StringBuilder("LINE " + myCellBase + " " + cellsResources.get(i).index + " " + strength);
                     } else {
-                        stringBuilder.append(";LINE " + nextCell + " " + i + " 1");
-                        nextCell = i;
+                        stringBuilder.append(";LINE " + myCellBase + " " + cellsResources.get(i).index + " " + strength);
                     }
                 }
             }
