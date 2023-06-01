@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,7 +41,6 @@ class Player {
             StringBuilder stringBuilder = null;
             List<Cell> cellsResourcesNeighbors = new ArrayList<>();
 
-            int myCellBase = myBases.get(0);
             int numberMyAnts = 0;
             for (int i = 0; i < numberOfCells; i++) {
                 int resources = in.nextInt(); // the current amount of eggs/crystals on this cell
@@ -55,30 +52,45 @@ class Player {
                 numberMyAnts += myAnts;
             }
 
-            List<Integer> neighborsRest = new ArrayList<>();
-            List<Integer> neighborsVist = new ArrayList<>();
-            neighborsRest.addAll(cells.get(myCellBase).neighbors.stream().filter(voi -> voi != -1).collect(Collectors.toList()));
-            while (!neighborsRest.isEmpty()) {
-                Cell cell = cells.get(neighborsRest.get(0));
-                neighborsRest.remove(0);
-                boolean isOppAntBase = oppBases.contains(cell.index);
-                if (!isOppAntBase && cell.cellType != 0 && cell.resources != 0) {
-                    cellsResourcesNeighbors.add(cell);
+            Map<Integer, List<Cell>> hmap = new HashMap<>();
+
+            for (int i = 0; i < myBases.size(); i++) {
+                cellsResourcesNeighbors = new ArrayList<>();
+                List<Integer> neighborsRest = new ArrayList<>();
+                List<Integer> neighborsVist = new ArrayList<>();
+                int myCellBase = myBases.get(i);
+                neighborsRest.addAll(cells.get(myCellBase).neighbors.stream().filter(voi -> voi != -1).collect(Collectors.toList()));
+                while (!neighborsRest.isEmpty()) {
+                    Cell cell = cells.get(neighborsRest.get(0));
+                    neighborsRest.remove(0);
+                    boolean isOppAntBase = oppBases.contains(cell.index);
+                    if (!isOppAntBase && cell.cellType != 0 && cell.resources != 0 && !neighborsVist.contains(cell.index)) {
+                        cellsResourcesNeighbors.add(cell);
+                        //System.err.println("Add resources voisin" + cell);
+                    }
+                    neighborsVist.add(cell.index);
+                    neighborsRest.addAll(cells.get(cell.index).neighbors.stream().filter(voi -> (voi != -1 && !neighborsVist.contains(voi))).collect(Collectors.toList()));
                 }
-                neighborsVist.add(cell.index);
-                neighborsRest.addAll(cells.get(cell.index).neighbors.stream().filter(voi -> (voi != -1) && !neighborsVist.contains(voi)).collect(Collectors.toList()));
+                hmap.put(i, cellsResourcesNeighbors);
             }
 
             int strength = 1;
-            if (!cellsResourcesNeighbors.isEmpty()) {
-                int size = Math.min(cellsResourcesNeighbors.size(), numberMyAnts / (numberOfCells / 8) + 1);
-                for (int i = 0; i < size; i++) {
-                    if (stringBuilder == null) {
-                        stringBuilder = new StringBuilder("LINE " + cellsResourcesNeighbors.get(i).index + " " + myCellBase + " " + strength);
-                    } else {
-                        stringBuilder.append(";LINE " + cellsResourcesNeighbors.get(i).index + " " + myCellBase + " " + strength);
+            for (Map.Entry entry : hmap.entrySet()) {
+                cellsResourcesNeighbors = (List<Cell>) entry.getValue();
+                int myCellBase = myBases.get((int) entry.getKey());
+                if (!cellsResourcesNeighbors.isEmpty()) {
+                    int size = Math.min(cellsResourcesNeighbors.size(), numberMyAnts / (numberOfCells / 8) + 1);
+                    for (int i = 0; i < size; i++) {
+                        //System.err.println("Add LINE");
+                        if (stringBuilder == null) {
+                            System.err.println("Add StringBuilder");
+                            stringBuilder = new StringBuilder("LINE " + cellsResourcesNeighbors.get(i).index + " " + myCellBase + " " + strength);
+                        } else {
+                            stringBuilder.append(";LINE " + cellsResourcesNeighbors.get(i).index + " " + myCellBase + " " + strength);
+                        }
                     }
                 }
+
             }
             // WAIT | LINE <sourceIdx> <targetIdx> <strength> | BEACON <cellIdx> <strength> | MESSAGE <text>
             if (stringBuilder == null) {
