@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 // Define the data structures as records
 record Vector(int x, int y) {
@@ -29,6 +30,8 @@ class Player {
             int type = in.nextInt();
             fishDetails.put(fishId, new FishDetail(color, type));
         }
+
+        boolean returnSurface = false;
 
         // game loop
         while (true) {
@@ -111,17 +114,86 @@ class Player {
                 myRadarBlips.get(droneId).add(new RadarBlip(fishId, radar));
             }
 
-            for (Drone drone : myDrones) {
-                int x = drone.pos().x();
-                int y = drone.pos().y();
-                Random rand = new Random();
-                Fish fishTarget = visibleFishes.get(rand.nextInt(visibleFishCount));
-                int targetX = fishTarget.pos().x();
-                int targetY = fishTarget.pos().y();
-                int light = 1;
 
-                System.out.println(String.format("MOVE %d %d %d", targetX, targetY, light));
+            for (Drone drone : myDrones) {
+                int light = visibleFishCount != 0 ? 1 : 0;
+                if (returnSurface) {
+                    System.out.println(String.format("MOVE %d %d %d", drone.pos().x(), 400, 0));
+                    if (drone.pos().y() < 500) {
+                        returnSurface = false;
+                    }
+                } else {
+                    int x = drone.pos().x();
+                    int y = drone.pos().y();
+                    List<RadarBlip> radarBlips = myRadarBlips.get(drone.droneId());
+                    Vector result = getTarget(myScans, visibleFishes, x, y, radarBlips);
+                    System.out.println(String.format("MOVE %d %d %d", result.x(), result.y(), light));
+                }
+
+                if (light == 1) {
+                    returnSurface = true;
+                }
+
             }
         }
+    }
+
+    private static Vector getTarget(List<Integer> myScans, List<Fish> visibleFishes, int x, int y, List<RadarBlip> radarBlips) {
+        int targetX = 5000;
+        int targetY = 5000;
+        if (!radarBlips.isEmpty()) {
+            String direction = "NOT";
+            RadarBlip radarBlipSelect = null;
+            for (RadarBlip radarBlip : radarBlips) {
+                if (!myScans.contains(radarBlip.fishId())) {
+                    radarBlipSelect = radarBlip;
+                    direction = radarBlipSelect.dir();
+                    break;
+                }
+            }
+
+            Optional<Fish> fishSelect = Optional.empty();
+            if (!visibleFishes.isEmpty()) {
+                List<Fish> fishList = visibleFishes.stream()
+                        .filter(xFish -> !!myScans.contains(xFish.fishId()))
+                        .collect(Collectors.toList());
+
+                if (!fishList.isEmpty()) {
+                    Random rand = new Random();
+                    fishSelect = Optional.ofNullable(fishList.get(rand.nextInt(fishList.size())));
+                }
+            }
+
+            switch (direction) {
+                case "TL" -> {
+                    targetX = Math.max(x - 500, 0);
+                    targetY = Math.max(y - 500, 0);
+                }
+                case "TR" -> {
+                    targetX = Math.min(x + 500, 10000);
+                    targetY = Math.max(y - 500, 0);
+                }
+                case "BL" -> {
+                    targetX = Math.max(x - 500, 0);
+                    targetY = Math.min(y + 500, 10000);
+                }
+                case "BR" -> {
+                    targetX = Math.min(x + 500, 10000);
+                    targetY = Math.min(y + 500, 10000);
+                }
+                default -> {
+                    targetX = 5000;
+                    targetY = 5000;
+                }
+            }
+
+            if (fishSelect.isPresent()) {
+                targetX = fishSelect.get().pos().x();
+                targetY = fishSelect.get().pos().y();
+            }
+        }
+
+        Vector result = new Vector(targetX, targetY);
+        return result;
     }
 }
