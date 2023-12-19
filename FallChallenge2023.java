@@ -24,6 +24,17 @@ class Player {
         List<Integer> numberY = List.of(500, 9400);
         List<Integer> numberX = List.of(600, 2000, 3000, 5000, 6000, 7000, 8000);
 
+        Map<Integer, List<Integer>> numberXForDrone = new HashMap<Integer, List<Integer>>() {{
+            put(0, List.of(600, 2000, 3000, 5000, 6000, 7000, 8000));
+            put(1, List.of(2000, 3000, 5000, 6000, 7000, 8000, 600));
+            put(2, List.of(3000, 5000, 6000, 7000, 8000, 600, 2000));
+            put(3, List.of(5000, 6000, 7000, 8000, 600, 2000, 3000));
+            put(4, List.of(6000, 7000, 8000, 600, 2000, 3000, 5000));
+            put(5, List.of(7000, 8000, 600, 2000, 3000, 5000, 6000));
+            put(6, List.of(8000, 600, 2000, 3000, 5000, 6000, 7000));
+            put(7, List.of(600, 2000, 3000, 5000, 6000, 7000, 8000));
+        }};
+
         int fishCount = in.nextInt();
         for (int i = 0; i < fishCount; i++) {
             int fishId = in.nextInt();
@@ -34,8 +45,8 @@ class Player {
 
         int tourX = 0;
         int tourY = 0;
-        int posY = numberY.get(tourX);
-        int posX = numberX.get(tourY);
+        int[] posY = {numberY.get(tourY), numberY.get(tourY), numberY.get(tourY), numberY.get(tourY)};
+        int[] posX = {numberX.get(tourX), numberX.get(tourX), numberX.get(tourX), numberX.get(tourX)};
 
         // game loop
         while (true) {
@@ -124,21 +135,22 @@ class Player {
                 int light = visibleFishCount != 0 ? 1 : 0;
                 int x = drone.pos().x();
                 int y = drone.pos().y();
+                System.err.println("drone.droneId() = " + drone.droneId());
                 System.err.println("X = " + x);
                 System.err.println("posX = " + posX);
                 System.err.println("Y = " + y);
                 System.err.println("posY = " + posY);
                 System.err.println("tourX = " + tourX);
                 System.err.println("tourY = " + tourY);
-                if (x == posX) {
+                if (x == posX[drone.droneId()]) {
                     tourX = (tourX + 1) % 7;
-                    posX = numberX.get(tourX);
-                } else if (y == posY) {
+                    posX[drone.droneId()] = numberXForDrone.get(drone.droneId()).get(tourX);
+                } else if (y == posY[drone.droneId()]) {
                     tourY = (tourY + 1) % 2;
-                    posY = numberY.get(tourY);
+                    posY[drone.droneId()] = numberY.get(tourY);
                 }
 
-                System.out.println(String.format("MOVE %d %d %d", posX, posY, light));
+                System.out.println(String.format("MOVE %d %d %d", posX[drone.droneId()], posY[drone.droneId()], light));
 
             }
         }
