@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 // Define the data structures as records
 record Vector(int x, int y) {
@@ -22,6 +21,8 @@ class Player {
         Scanner in = new Scanner(System.in);
 
         Map<Integer, FishDetail> fishDetails = new HashMap<>();
+        List<Integer> numberX = List.of(600, 9400);
+        List<Integer> numberY = List.of(500, 2500, 3100, 5000, 6000, 7000, 8000);
 
         int fishCount = in.nextInt();
         for (int i = 0; i < fishCount; i++) {
@@ -31,7 +32,10 @@ class Player {
             fishDetails.put(fishId, new FishDetail(color, type));
         }
 
-        boolean returnSurface = false;
+        int tourX = 0;
+        int tourY = 0;
+        int posY = numberY.get(tourX);
+        int posX = numberX.get(tourY);
 
         // game loop
         while (true) {
@@ -42,6 +46,7 @@ class Player {
             List<Drone> foeDrones = new ArrayList<>();
             List<Fish> visibleFishes = new ArrayList<>();
             Map<Integer, List<RadarBlip>> myRadarBlips = new HashMap<>();
+
 
             int myScore = in.nextInt();
             int foeScore = in.nextInt();
@@ -117,83 +122,25 @@ class Player {
 
             for (Drone drone : myDrones) {
                 int light = visibleFishCount != 0 ? 1 : 0;
-                if (returnSurface) {
-                    System.out.println(String.format("MOVE %d %d %d", drone.pos().x(), 400, 0));
-                    if (drone.pos().y() < 500) {
-                        returnSurface = false;
-                    }
-                } else {
-                    int x = drone.pos().x();
-                    int y = drone.pos().y();
-                    List<RadarBlip> radarBlips = myRadarBlips.get(drone.droneId());
-                    Vector result = getTarget(myScans, visibleFishes, x, y, radarBlips);
-                    System.out.println(String.format("MOVE %d %d %d", result.x(), result.y(), light));
+                int x = drone.pos().x();
+                int y = drone.pos().y();
+                System.err.println("X = " + x);
+                System.err.println("posX = " + posX);
+                System.err.println("Y = " + y);
+                System.err.println("posY = " + posY);
+                System.err.println("tourX = " + tourX);
+                System.err.println("tourY = " + tourY);
+                if (x == posX) {
+                    tourX = (tourX + 1) % 2;
+                    posX = numberX.get(tourX);
+                } else if (y == posY) {
+                    tourY = (tourY + 1) % 7;
+                    posY = numberY.get(tourY);
                 }
 
-                if (light == 1) {
-                    returnSurface = true;
-                }
+                System.out.println(String.format("MOVE %d %d %d", posX, posY, light));
 
             }
         }
-    }
-
-    private static Vector getTarget(List<Integer> myScans, List<Fish> visibleFishes, int x, int y, List<RadarBlip> radarBlips) {
-        int targetX = 5000;
-        int targetY = 5000;
-        if (!radarBlips.isEmpty()) {
-            String direction = "NOT";
-            RadarBlip radarBlipSelect = null;
-            for (RadarBlip radarBlip : radarBlips) {
-                if (!myScans.contains(radarBlip.fishId())) {
-                    radarBlipSelect = radarBlip;
-                    direction = radarBlipSelect.dir();
-                    break;
-                }
-            }
-
-            Optional<Fish> fishSelect = Optional.empty();
-            if (!visibleFishes.isEmpty()) {
-                List<Fish> fishList = visibleFishes.stream()
-                        .filter(xFish -> !!myScans.contains(xFish.fishId()))
-                        .collect(Collectors.toList());
-
-                if (!fishList.isEmpty()) {
-                    Random rand = new Random();
-                    fishSelect = Optional.ofNullable(fishList.get(rand.nextInt(fishList.size())));
-                }
-            }
-
-            switch (direction) {
-                case "TL" -> {
-                    targetX = Math.max(x - 500, 0);
-                    targetY = Math.max(y - 500, 0);
-                }
-                case "TR" -> {
-                    targetX = Math.min(x + 500, 10000);
-                    targetY = Math.max(y - 500, 0);
-                }
-                case "BL" -> {
-                    targetX = Math.max(x - 500, 0);
-                    targetY = Math.min(y + 500, 10000);
-                }
-                case "BR" -> {
-                    targetX = Math.min(x + 500, 10000);
-                    targetY = Math.min(y + 500, 10000);
-                }
-                default -> {
-                    targetX = 5000;
-                    targetY = 5000;
-                }
-            }
-
-            if (fishSelect.isPresent()) {
-                targetX = fishSelect.get().pos().x();
-                targetY = fishSelect.get().pos().y();
-            }
-        }
-
-        Vector result = new Vector(targetX, targetY);
-        return result;
     }
 }
