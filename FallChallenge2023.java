@@ -21,8 +21,8 @@ class Player {
         Scanner in = new Scanner(System.in);
 
         Map<Integer, FishDetail> fishDetails = new HashMap<>();
-        List<Integer> numberX = List.of(600, 9400);
-        List<Integer> numberY = List.of(500, 2500, 3100, 5000, 6000, 7000, 8000);
+        List<Integer> numberY = List.of(500, 9400);
+        List<Integer> numberX = List.of(600, 2000, 3000, 5000, 6000, 7000, 8000);
 
         int fishCount = in.nextInt();
         for (int i = 0; i < fishCount; i++) {
@@ -131,10 +131,10 @@ class Player {
                 System.err.println("tourX = " + tourX);
                 System.err.println("tourY = " + tourY);
                 if (x == posX) {
-                    tourX = (tourX + 1) % 2;
+                    tourX = (tourX + 1) % 7;
                     posX = numberX.get(tourX);
                 } else if (y == posY) {
-                    tourY = (tourY + 1) % 7;
+                    tourY = (tourY + 1) % 2;
                     posY = numberY.get(tourY);
                 }
 
