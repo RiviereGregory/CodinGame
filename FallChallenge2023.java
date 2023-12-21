@@ -43,6 +43,7 @@ class Player {
             fishDetails.put(fishId, new FishDetail(color, type));
         }
 
+        int tour = 0;
         int tourX = 0;
         int tourY = 0;
         int[] posY = {numberY.get(tourY), numberY.get(tourY), numberY.get(tourY), numberY.get(tourY)};
@@ -50,6 +51,7 @@ class Player {
 
         // game loop
         while (true) {
+            tour++;
             List<Integer> myScans = new ArrayList<>();
             List<Integer> foeScans = new ArrayList<>();
             Map<Integer, Drone> droneById = new HashMap<>();
@@ -132,16 +134,9 @@ class Player {
 
 
             for (Drone drone : myDrones) {
-                int light = visibleFishCount != 0 ? 1 : 0;
+                int light = tour % 5 == 1 ? 1 : 0;
                 int x = drone.pos().x();
                 int y = drone.pos().y();
-                System.err.println("drone.droneId() = " + drone.droneId());
-                System.err.println("X = " + x);
-                System.err.println("posX = " + posX);
-                System.err.println("Y = " + y);
-                System.err.println("posY = " + posY);
-                System.err.println("tourX = " + tourX);
-                System.err.println("tourY = " + tourY);
                 if (x == posX[drone.droneId()]) {
                     tourX = (tourX + 1) % 7;
                     posX[drone.droneId()] = numberXForDrone.get(drone.droneId()).get(tourX);
