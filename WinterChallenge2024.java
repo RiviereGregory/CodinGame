@@ -24,10 +24,10 @@ class Organ {
     int parentId;
     int rootId;
     Pos pos;
-    String organType;
+    TypeProtein organType;
     String dir;
 
-    Organ(int id, int owner, int parentId, int rootId, Pos pos, String organType, String dir) {
+    Organ(int id, int owner, int parentId, int rootId, Pos pos, TypeProtein organType, String dir) {
         this.id = id;
         this.owner = owner;
         this.parentId = parentId;
@@ -41,10 +41,10 @@ class Organ {
 class Cell {
     Pos pos;
     boolean isWall;
-    String protein;
+    TypeProtein protein;
     Organ organ;
 
-    Cell(Pos pos, boolean isWall, String protein, Organ organ) {
+    Cell(Pos pos, boolean isWall, TypeProtein protein, Organ organ) {
         this.pos = pos;
         this.isWall = isWall;
         this.protein = protein;
@@ -104,16 +104,16 @@ class Grid {
 
 class Game {
     Grid grid;
-    Map<String, Integer> myProteins;
-    Map<String, Integer> oppProteins;
+    EnumMap<TypeProtein, Integer> myProteins;
+    EnumMap<TypeProtein, Integer> oppProteins;
     List<Organ> myOrgans;
     List<Organ> oppOrgans;
     Map<Integer, Organ> organMap;
 
     Game(int width, int height) {
         grid = new Grid(width, height);
-        myProteins = new HashMap<>();
-        oppProteins = new HashMap<>();
+        myProteins = new EnumMap<>(TypeProtein.class);
+        oppProteins = new EnumMap<>(TypeProtein.class);
         myOrgans = new ArrayList<>();
         oppOrgans = new ArrayList<>();
         organMap = new HashMap<>();
@@ -129,10 +129,10 @@ class Game {
 
 class CellForGrow {
     Cell cell;
-    Player.Cardinal directionProt;
+    Cardinal directionProt;
     boolean isHarvester;
 
-    CellForGrow(Cell cell, Player.Cardinal directionProt, boolean isHarvester) {
+    CellForGrow(Cell cell, Cardinal directionProt, boolean isHarvester) {
         this.cell = cell;
         this.directionProt = directionProt;
         this.isHarvester = isHarvester;
@@ -148,19 +148,18 @@ class CellForGrow {
     }
 }
 
+enum Cardinal {
+    N, E, S, W
+}
+
+enum TypeProtein {
+    TENTACLE, WALL, A, B, C, D, HARVESTER, BASIC, ROOT, SPORER
+}
+
 /**
  * Grow and multiply your organisms to end up larger than your opponent.
  **/
 class Player {
-    // Protein types
-    static final String A = "A";
-    static final String B = "B";
-    static final String C = "C";
-    static final String D = "D";
-
-    static final String WALL = "WALL";
-    static final String HARVESTER = "HARVESTER";
-    static final String BASIC = "BASIC";
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -178,7 +177,7 @@ class Player {
             for (int i = 0; i < entityCount; i++) {
                 int x = in.nextInt();
                 int y = in.nextInt(); // grid coordinate
-                String type = in.next(); // WALL, ROOT, BASIC, TENTACLE, HARVESTER, SPORER, A, B, C, D
+                TypeProtein type = TypeProtein.valueOf(in.next()); // WALL, ROOT, BASIC, TENTACLE, HARVESTER, SPORER, A, B, C, D
                 int owner = in.nextInt(); // 1 if your organ, 0 if enemy organ, -1 if neither
                 int organId = in.nextInt(); // id of this entity if it's an organ, 0 otherwise
                 String organDir = in.next(); // N,E,S,W or X if not an organ
@@ -187,16 +186,18 @@ class Player {
 
                 Pos pos = new Pos(x, y);
                 Cell cell = null;
-                if (type.equals(WALL)) {
+                if (type.equals(TypeProtein.WALL)) {
                     cell = new Cell(pos, true, null, null);
-                } else if (Arrays.asList(A, B, C, D).contains(type)) {
+                } else if (Arrays.asList(TypeProtein.A, TypeProtein.B, TypeProtein.C, TypeProtein.D).contains(type)) {
                     cell = new Cell(pos, false, type, null);
                 } else {
                     Organ organ = new Organ(organId, owner, organParentId, organRootId, pos, type, organDir);
                     cell = new Cell(pos, false, null, organ);
                     if (owner == 1) {
                         game.myOrgans.add(organ);
-                        myLastOrgan = cell;
+                        if (myLastOrgan ==null || organId > myLastOrgan.organ.id) {
+                            myLastOrgan = cell;
+                        }
                     } else {
                         game.oppOrgans.add(organ);
                     }
@@ -215,14 +216,14 @@ class Player {
             int oppB = in.nextInt();
             int oppC = in.nextInt();
             int oppD = in.nextInt(); // opponent's protein stock
-            game.myProteins.put(A, myA);
-            game.myProteins.put(B, myB);
-            game.myProteins.put(C, myC);
-            game.myProteins.put(D, myD);
-            game.oppProteins.put(A, oppA);
-            game.oppProteins.put(B, oppB);
-            game.oppProteins.put(C, oppC);
-            game.oppProteins.put(D, oppD);
+            game.myProteins.put(TypeProtein.A, myA);
+            game.myProteins.put(TypeProtein.B, myB);
+            game.myProteins.put(TypeProtein.C, myC);
+            game.myProteins.put(TypeProtein.D, myD);
+            game.oppProteins.put(TypeProtein.A, oppA);
+            game.oppProteins.put(TypeProtein.B, oppB);
+            game.oppProteins.put(TypeProtein.C, oppC);
+            game.oppProteins.put(TypeProtein.D, oppD);
             int requiredActionsCount = in.nextInt(); // your number of organisms, output an action for each one in any order
             for (int i = 0; i < requiredActionsCount; i++) {
 
@@ -233,10 +234,10 @@ class Player {
 
     private static void response(Game game, Cell myLastOrgan) {
         CellForGrow cellForGrow = selectCellForGrow(game, myLastOrgan);
-        if (myLastOrgan != null && cellForGrow.isHarvester && game.myProteins.get(C) > 0 && game.myProteins.get(D) > 0) {
-            System.out.println("GROW " + myLastOrgan.organ.id + " " + cellForGrow.cell.pos.x + " " + cellForGrow.cell.pos.y + " " + HARVESTER + " " + cellForGrow.directionProt);
-        } else if (myLastOrgan != null && cellForGrow.cell != null && game.myProteins.get(A) > 0) {
-            System.out.println("GROW " + myLastOrgan.organ.id + " " + cellForGrow.cell.pos.x + " " + cellForGrow.cell.pos.y + " " + BASIC);
+        if (myLastOrgan != null && cellForGrow.isHarvester && game.myProteins.get(TypeProtein.C) > 0 && game.myProteins.get(TypeProtein.D) > 0) {
+            System.out.println("GROW " + myLastOrgan.organ.id + " " + cellForGrow.cell.pos.x + " " + cellForGrow.cell.pos.y + " " + TypeProtein.HARVESTER + " " + cellForGrow.directionProt);
+        } else if (myLastOrgan != null && cellForGrow.cell != null && game.myProteins.get(TypeProtein.A) > 0) {
+            System.out.println("GROW " + myLastOrgan.organ.id + " " + cellForGrow.cell.pos.x + " " + cellForGrow.cell.pos.y + " " + TypeProtein.BASIC);
         } else {
             System.out.println("WAIT");
         }
@@ -254,11 +255,11 @@ class Player {
             if (pos == null) continue;
             cell = game.grid.getCell(pos.x, pos.y);
             if (cell.isWall || (cell.organ != null && cell.organ.owner != -1)
-            || A.equalsIgnoreCase(cell.protein)) {
+                    || TypeProtein.A.equals(cell.protein)) {
                 continue;
             }
             cardForProt = getCardForProt(game.grid, cell);
-            System.err.println("Cell " + cell +" Card Cell "+card+" cardForProt "+cardForProt);
+            System.err.println("Cell " + cell + " Card Cell " + card + " cardForProt " + cardForProt);
             break;
         }
 
@@ -270,7 +271,7 @@ class Player {
             Pos pos = getPos(grid.width, grid.height, card, cell.pos);
             if (pos == null) continue;
             Cell cellProt = grid.getCell(pos.x, pos.y);
-            if ((cellProt != null && A.equalsIgnoreCase(cellProt.protein))) {
+            if ((cellProt != null && TypeProtein.A.equals(cellProt.protein))) {
                 return card;
             }
         }
@@ -321,9 +322,4 @@ class Player {
         }
         return newX;
     }
-
-    public enum Cardinal {
-        N, E, S, W
-    }
-
 }
