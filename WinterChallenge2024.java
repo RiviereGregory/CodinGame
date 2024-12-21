@@ -1,6 +1,4 @@
 import java.util.*;
-import java.io.*;
-import java.math.*;
 
 class Pos {
     final int x;
@@ -9,6 +7,14 @@ class Pos {
     Pos(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return "Pos{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }
 
@@ -48,11 +54,22 @@ class Cell {
     Cell(Pos pos) {
         this(pos, false, null, null);
     }
+
+    @Override
+    public String toString() {
+        return "Cell{" +
+                "pos=" + pos +
+                ", isWall=" + isWall +
+                ", protein='" + protein + '\'' +
+                ", organ=" + organ +
+                '}';
+    }
 }
 
 class Grid {
     Cell[] cells;
-    int width, height;
+    int width;
+    int height;
 
     Grid(int width, int height) {
         this.width = width;
@@ -110,6 +127,27 @@ class Game {
     }
 }
 
+class CellForGrow {
+    Cell cell;
+    Player.Cardinal directionProt;
+    boolean isHarvester;
+
+    CellForGrow(Cell cell, Player.Cardinal directionProt, boolean isHarvester) {
+        this.cell = cell;
+        this.directionProt = directionProt;
+        this.isHarvester = isHarvester;
+    }
+
+    @Override
+    public String toString() {
+        return "CellForGrow{" +
+                "cell=" + cell +
+                ", directionProt=" + directionProt +
+                ", isHarvester=" + isHarvester +
+                '}';
+    }
+}
+
 /**
  * Grow and multiply your organisms to end up larger than your opponent.
  **/
@@ -121,8 +159,10 @@ class Player {
     static final String D = "D";
 
     static final String WALL = "WALL";
+    static final String HARVESTER = "HARVESTER";
+    static final String BASIC = "BASIC";
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         int width = in.nextInt(); // columns in the game grid
         int height = in.nextInt(); // rows in the game grid
@@ -186,98 +226,104 @@ class Player {
             int requiredActionsCount = in.nextInt(); // your number of organisms, output an action for each one in any order
             for (int i = 0; i < requiredActionsCount; i++) {
 
-                Cell cell = selectCellForGrow(game, myLastOrgan);
-                if (myLastOrgan != null && cell != null && game.myProteins.get(A) > 0) {
-                    System.out.println("GROW " + myLastOrgan.organ.id + " " + cell.pos.x + " " + cell.pos.y + " BASIC");
-                } else {
-                    System.out.println("WAIT");
-                }
+                response(game, myLastOrgan);
             }
         }
-
-
     }
 
-    private static Cell selectCellForGrow(Game game, Cell myLastOrgan) {
+    private static void response(Game game, Cell myLastOrgan) {
+        CellForGrow cellForGrow = selectCellForGrow(game, myLastOrgan);
+        if (myLastOrgan != null && cellForGrow.isHarvester && game.myProteins.get(C) > 0 && game.myProteins.get(D) > 0) {
+            System.out.println("GROW " + myLastOrgan.organ.id + " " + cellForGrow.cell.pos.x + " " + cellForGrow.cell.pos.y + " " + HARVESTER + " " + cellForGrow.directionProt);
+        } else if (myLastOrgan != null && cellForGrow.cell != null && game.myProteins.get(A) > 0) {
+            System.out.println("GROW " + myLastOrgan.organ.id + " " + cellForGrow.cell.pos.x + " " + cellForGrow.cell.pos.y + " " + BASIC);
+        } else {
+            System.out.println("WAIT");
+        }
+    }
+
+    private static CellForGrow selectCellForGrow(Game game, Cell myLastOrgan) {
+        if (myLastOrgan == null) return null;
+
         Pos myPos = myLastOrgan.pos;
+
         Cell cell = null;
+        Cardinal cardForProt = null;
         for (Cardinal card : Cardinal.values()) {
             Pos pos = getPos(game.grid.width, game.grid.height, card, myPos);
-            if (pos == null ) continue;
+            if (pos == null) continue;
             cell = game.grid.getCell(pos.x, pos.y);
-            if (cell.isWall) {
-                continue;
-            } else if (cell.organ != null && cell.organ.owner != -1) {
+            if (cell.isWall || (cell.organ != null && cell.organ.owner != -1)
+            || A.equalsIgnoreCase(cell.protein)) {
                 continue;
             }
+            cardForProt = getCardForProt(game.grid, cell);
+            System.err.println("Cell " + cell +" Card Cell "+card+" cardForProt "+cardForProt);
             break;
         }
 
-        return cell;
+        return new CellForGrow(cell, cardForProt, cardForProt != null);
+    }
+
+    private static Cardinal getCardForProt(Grid grid, Cell cell) {
+        for (Cardinal card : Cardinal.values()) {
+            Pos pos = getPos(grid.width, grid.height, card, cell.pos);
+            if (pos == null) continue;
+            Cell cellProt = grid.getCell(pos.x, pos.y);
+            if ((cellProt != null && A.equalsIgnoreCase(cellProt.protein))) {
+                return card;
+            }
+        }
+        return null;
     }
 
     private static Pos getPos(int limitX, int limitY, Cardinal cardinal, Pos myPos) {
         int x = myPos.x;
         int y = myPos.y;
         switch (cardinal) {
-            case N -> {
-                if ((y - 1) >= 0) {
-                    y = y - 1;
-                } else return null;
-            }
-            case NE -> {
-                if ((y - 1) >= 0) {
-                    y = y - 1;
-                } else return null;
-                if ((x + 1) < limitX) {
-                    x = x + 1;
-                } else return null;
-            }
-            case E -> {
-                if ((x + 1) < limitX) {
-                    x = x + 1;
-                } else return null;
-            }
-            case SE -> {
-                if ((y + 1) < limitY) {
-                    y = y + 1;
-                } else return null;
-                if ((x + 1) < limitX) {
-                    x = x + 1;
-                } else return null;
-            }
-            case S -> {
-                if ((y + 1) < limitY) {
-                    y = y + 1;
-                } else return null;
-            }
-            case SW -> {
-                if ((y + 1) < limitY) {
-                    y = y + 1;
-                } else return null;
-                if ((x - 1) >= 0) {
-                    x = x - 1;
-                } else return null;
-            }
-            case W -> {
-                if ((x - 1) >= 0) {
-                    x = x - 1;
-                } else return null;
-            }
-            case NW -> {
-                if ((y - 1) >= 0) {
-                    y = y - 1;
-                } else return null;
-                if ((x - 1) >= 0) {
-                    x = x - 1;
-                } else return null;
-            }
+            case N -> y = getN(y);
+            case E -> x = getE(x, limitX);
+            case S -> y = getS(y, limitY);
+            case W -> x = getW(x);
         }
 
-        return new Pos(x, y);
+        return (x == -1 || y == -1) ? null : new Pos(x, y);
+    }
+
+    private static int getN(int y) {
+        int newY = -1;
+        if ((y - 1) >= 0) {
+            newY = y - 1;
+        }
+        return newY;
+    }
+
+    private static int getE(int x, int limitX) {
+        int newX = -1;
+        if ((x + 1) < limitX) {
+            newX = x + 1;
+        }
+        return newX;
+    }
+
+    private static int getS(int y, int limitY) {
+        int newY = -1;
+        if ((y + 1) < limitY) {
+            newY = y + 1;
+        }
+        return newY;
+    }
+
+    private static int getW(int x) {
+        int newX = -1;
+        if ((x - 1) >= 0) {
+            newX = x - 1;
+        }
+        return newX;
     }
 
     public enum Cardinal {
-        N, NE, E, SE, S, SW, W, NW
+        N, E, S, W
     }
+
 }
