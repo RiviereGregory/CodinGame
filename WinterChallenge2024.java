@@ -108,6 +108,8 @@ class Game {
     EnumMap<TypeProtein, Integer> oppProteins;
     List<Organ> myOrgans;
     List<Organ> oppOrgans;
+
+    List<Cell> proteins;
     Map<Integer, Organ> organMap;
 
     Game(int width, int height) {
@@ -117,6 +119,7 @@ class Game {
         myOrgans = new ArrayList<>();
         oppOrgans = new ArrayList<>();
         organMap = new HashMap<>();
+        proteins = new ArrayList<>();
     }
 
     void reset() {
@@ -124,6 +127,7 @@ class Game {
         myOrgans.clear();
         oppOrgans.clear();
         organMap.clear();
+        proteins.clear();
     }
 }
 
@@ -190,6 +194,7 @@ class Player {
                     cell = new Cell(pos, true, null, null);
                 } else if (Arrays.asList(TypeProtein.A, TypeProtein.B, TypeProtein.C, TypeProtein.D).contains(type)) {
                     cell = new Cell(pos, false, type, null);
+                    game.proteins.add(cell);
                 } else {
                     Organ organ = new Organ(organId, owner, organParentId, organRootId, pos, type, organDir);
                     cell = new Cell(pos, false, null, organ);
