@@ -1,8 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * Win the water fight by controlling the most territory, or out-soak your opponent!
@@ -33,11 +29,15 @@ class Player {
         int width = in.nextInt(); // Width of the game map
         int height = in.nextInt(); // Height of the game map
         int map[][] = new int[width][height];
+        List<Pos> protection = new ArrayList<>();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 int x = in.nextInt(); // X coordinate, 0 is left edge
                 int y = in.nextInt(); // Y coordinate, 0 is top edge
                 int tileType = in.nextInt();
+                if (tileType > 1) {
+                    protection.add(new Pos(x, y));
+                }
                 map[x][y] = tileType;
             }
         }
@@ -45,46 +45,79 @@ class Player {
         // game loop
         while (true) {
             int agentCount = in.nextInt(); // Total number of agents still in the game
-            System.err.println("agentCount "+ agentCount);
-            List<Integer> agentIds = new ArrayList<>();
+            System.err.println("agentCount " + agentCount);
+            List<Agent> myAgentsLive = new ArrayList<>();
+            List<Agent> ourAgentsLive = new ArrayList<>();
             for (int i = 0; i < agentCount; i++) {
                 int agentId = in.nextInt();
-                agentIds.add(agentId);
+                System.err.println("agentId " + agentId);
                 int x = in.nextInt();
                 int y = in.nextInt();
+                System.err.println("x " + x + ",y " + y);
                 int cooldown = in.nextInt(); // Number of turns before this agent can shoot
                 int splashBombs = in.nextInt();
                 int wetness = in.nextInt(); // Damage (0-100) this agent has taken
-                myAgents.stream().filter(agent -> agent.agentId == agentId).map(agent -> {
+                Optional<Agent> first = myAgents.stream().filter(agent -> agent.agentId == agentId).map(agent -> {
                     agent.x = x;
                     agent.y = y;
                     agent.shootCooldown = cooldown;
                     agent.splashBombs = splashBombs;
                     agent.soakingPower = wetness;
-                    return null;
-                });
-                ourAgents.stream().filter(agent -> agent.agentId == agentId).map(agent -> {
+                    System.err.println("Myagent " + agent);
+                    return agent;
+                }).findFirst();
+                first.ifPresent(myAgentsLive::add);
+
+                Optional<Agent> ourfirst = ourAgents.stream().filter(agent -> agent.agentId == agentId).map(agent -> {
                     agent.x = x;
                     agent.y = y;
                     agent.shootCooldown = cooldown;
                     agent.splashBombs = splashBombs;
                     agent.soakingPower = wetness;
-                    return null;
-                });
+                    System.err.println("Ouragent " + agent);
+                    return agent;
+                }).findFirst();
+                ourfirst.ifPresent(ourAgentsLive::add);
+
             }
-            List<Agent> myAgentsLive = myAgents.stream().filter(agent -> agentIds.contains(agent.agentId)).collect(Collectors.toList());
-            List<Agent> ourAgentsLive = ourAgents.stream().filter(agent -> agentIds.contains(agent.agentId)).collect(Collectors.toList());
+
             int myAgentCount = in.nextInt(); // Number of alive agents controlled by you
+            System.err.println("myAgentCount " + myAgentCount);
+            System.err.println("ourAgentsLive size " + ourAgentsLive.size());
+            System.err.println("myAgentsLive size " + myAgentsLive.size());
             for (int i = 0; i < myAgentCount; i++) {
 
                 // Write an action using System.out.println()
                 // To debug: System.err.println("Debug messages...");
                 Agent agent = myAgentsLive.get(i);
+                System.err.println("agent " + agent);
 
                 // One line per agent: <agentId>;<action1;action2;...> actions are "MOVE x y | SHOOT id | THROW x y | HUNKER_DOWN | MESSAGE text"
                 String move = agent.agentId + "; MOVE 6 1";
                 String move1 = agent.agentId + "; MOVE 6 3";
-                if (!ourAgentsLive.isEmpty()) {
+                if (!protection.isEmpty()) {
+                    Optional<Pos> posPlusPres =
+                            protection.stream().min(Comparator.comparing(element -> Distance(element.x, element.y, agent.x, agent.y)));
+                    int x = posPlusPres.get().x;
+                    int y = posPlusPres.get().y;
+                    System.err.println("x " + x + ",y " + y);
+                    System.err.println("agent x " + agent.x + ",y " + agent.y);
+                    if (x > 0 && x < width / 2) {
+                        x--;
+                    } else if (x < width) {
+                        x++;
+                    } else if (y > 0 && y < height / 2) {
+                        y--;
+                    } else if (y < height) {
+                        y++;
+                    }
+                    if (!ourAgentsLive.isEmpty()) {
+                        System.out.println(agent.agentId + "; MOVE " + x + " " + y + "; SHOOT " + ourAgentsLive.stream().min(Comparator.comparing(element -> Distance(element.x, element.y, agent.x, agent.y))).get().agentId);
+                    } else {
+                        System.out.println(agent.agentId + "; MOVE " + x + " " + y);
+                    }
+
+                } else if (!ourAgentsLive.isEmpty()) {
                     Optional<Agent> first = ourAgentsLive.stream().filter(ag -> ag.soakingPower > 0).findFirst();
                     if (!first.isEmpty()) {
                         String shoot = agent.agentId + "; SHOOT " + ourAgentsLive.get(0).agentId;
@@ -101,6 +134,25 @@ class Player {
             }
         }
     }
+
+    static public double sqr(double a) {
+        return a * a;
+    }
+
+    static public double Distance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(sqr(y2 - y1) + sqr(x2 - x1));
+    }
+}
+
+class Pos {
+    int x;
+    int y;
+
+    public Pos(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
 }
 
 class Agent {
@@ -111,8 +163,8 @@ class Agent {
     int soakingPower;
     int splashBombs;
 
-    int x;
-    int y;
+    Integer x;
+    Integer y;
 
     public Agent(int agentId, int player, int shootCooldown, int optimalRange, int soakingPower, int splashBombs) {
         this.agentId = agentId;
@@ -132,6 +184,8 @@ class Agent {
                 ", optimalRange=" + optimalRange +
                 ", soakingPower=" + soakingPower +
                 ", splashBombs=" + splashBombs +
+                ", x=" + x +
+                ", y=" + y +
                 '}';
     }
 }
