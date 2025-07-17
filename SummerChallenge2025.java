@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  * Win the water fight by controlling the most territory, or out-soak your opponent!
@@ -43,8 +45,11 @@ class Player {
         // game loop
         while (true) {
             int agentCount = in.nextInt(); // Total number of agents still in the game
+            System.err.println("agentCount "+ agentCount);
+            List<Integer> agentIds = new ArrayList<>();
             for (int i = 0; i < agentCount; i++) {
                 int agentId = in.nextInt();
+                agentIds.add(agentId);
                 int x = in.nextInt();
                 int y = in.nextInt();
                 int cooldown = in.nextInt(); // Number of turns before this agent can shoot
@@ -67,17 +72,28 @@ class Player {
                     return null;
                 });
             }
+            List<Agent> myAgentsLive = myAgents.stream().filter(agent -> agentIds.contains(agent.agentId)).collect(Collectors.toList());
+            List<Agent> ourAgentsLive = ourAgents.stream().filter(agent -> agentIds.contains(agent.agentId)).collect(Collectors.toList());
             int myAgentCount = in.nextInt(); // Number of alive agents controlled by you
             for (int i = 0; i < myAgentCount; i++) {
 
                 // Write an action using System.out.println()
                 // To debug: System.err.println("Debug messages...");
-                Agent agent = myAgents.get(i);
+                Agent agent = myAgentsLive.get(i);
 
                 // One line per agent: <agentId>;<action1;action2;...> actions are "MOVE x y | SHOOT id | THROW x y | HUNKER_DOWN | MESSAGE text"
                 String move = agent.agentId + "; MOVE 6 1";
                 String move1 = agent.agentId + "; MOVE 6 3";
-                if (i % 2 == 0) {
+                if (!ourAgentsLive.isEmpty()) {
+                    Optional<Agent> first = ourAgentsLive.stream().filter(ag -> ag.soakingPower > 0).findFirst();
+                    if (!first.isEmpty()) {
+                        String shoot = agent.agentId + "; SHOOT " + ourAgentsLive.get(0).agentId;
+                        System.out.println(shoot);
+                    } else {
+                        System.out.println(move);
+                    }
+
+                } else if (i % 2 == 0) {
                     System.out.println(move);
                 } else {
                     System.out.println(move1);
