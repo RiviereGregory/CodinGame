@@ -50,10 +50,10 @@ class Player {
             List<Agent> ourAgentsLive = new ArrayList<>();
             for (int i = 0; i < agentCount; i++) {
                 int agentId = in.nextInt();
-                System.err.println("agentId " + agentId);
+                // System.err.println("agentId " + agentId);
                 int x = in.nextInt();
                 int y = in.nextInt();
-                System.err.println("x " + x + ",y " + y);
+                // System.err.println("x " + x + ",y " + y);
                 int cooldown = in.nextInt(); // Number of turns before this agent can shoot
                 int splashBombs = in.nextInt();
                 int wetness = in.nextInt(); // Damage (0-100) this agent has taken
@@ -63,7 +63,7 @@ class Player {
                     agent.shootCooldown = cooldown;
                     agent.splashBombs = splashBombs;
                     agent.soakingPower = wetness;
-                    System.err.println("Myagent " + agent);
+                    // System.err.println("Myagent " + agent);
                     return agent;
                 }).findFirst();
                 first.ifPresent(myAgentsLive::add);
@@ -74,7 +74,7 @@ class Player {
                     agent.shootCooldown = cooldown;
                     agent.splashBombs = splashBombs;
                     agent.soakingPower = wetness;
-                    System.err.println("Ouragent " + agent);
+                    // System.err.println("Ouragent " + agent);
                     return agent;
                 }).findFirst();
                 ourfirst.ifPresent(ourAgentsLive::add);
@@ -98,21 +98,66 @@ class Player {
                 if (!protection.isEmpty()) {
                     Optional<Pos> posPlusPres =
                             protection.stream().min(Comparator.comparing(element -> Distance(element.x, element.y, agent.x, agent.y)));
-                    int x = posPlusPres.get().x;
-                    int y = posPlusPres.get().y;
-                    System.err.println("x " + x + ",y " + y);
-                    System.err.println("agent x " + agent.x + ",y " + agent.y);
-                    if (x > 0 && x < width / 2) {
-                        x--;
-                    } else if (x < width) {
-                        x++;
-                    } else if (y > 0 && y < height / 2) {
-                        y--;
-                    } else if (y < height) {
-                        y++;
-                    }
+                    Pos pos = getPos(posPlusPres.get().x, posPlusPres.get().y, width, height);
+                    int x = pos.x;
+                    int y = pos.y;
+                    System.err.println("x " + posPlusPres.get().x + ",y " + posPlusPres.get().y);
+                    System.err.println("Pour agent " + agent.agentId + " x " + agent.x + ",y " + agent.y);
+
                     if (!ourAgentsLive.isEmpty()) {
-                        System.out.println(agent.agentId + "; MOVE " + x + " " + y + "; SHOOT " + ourAgentsLive.stream().min(Comparator.comparing(element -> Distance(element.x, element.y, agent.x, agent.y))).get().agentId);
+                        Set<Agent> ourAgentNotFree = new HashSet<>();
+                        for (Agent agentOur : ourAgentsLive) {
+                            for (Agent agentMy : myAgentsLive) {
+                                if (((agentOur.x - 3 < agentMy.x) && (agentOur.x + 3 > agentMy.x) &&
+                                        (agentOur.y - 3 < agentMy.y) && (agentOur.y + 3 > agentMy.y))) {
+                                    ourAgentNotFree.add(agentOur);
+                                }
+                            }
+                        }
+                        List<Agent> ourAgentFree = ourAgentsLive.stream().filter(element -> !ourAgentNotFree.contains(element)).toList();
+                        System.err.println("ourAgentNotFree : " + ourAgentNotFree.size() + " ourAgentsLive : " + ourAgentsLive.size());
+                        System.err.println("ourAgentFree : " + ourAgentFree.size() + " ourAgentsLive : " + ourAgentsLive.size());
+
+                        Agent ourAgentShoot = ourAgentFree.stream().min(Comparator.comparing(element -> Distance(element.x, element.y, agent.x, agent.y))).get();
+                        System.err.println("ourAgentShoot " + ourAgentShoot);
+
+                        double distanceOurAgentShoot = Distance(ourAgentShoot.x, ourAgentShoot.y, agent.x, agent.y);
+                        String moveAction = "; MOVE " + x + " " + y;
+                        String shootAction = "";
+                        Set<Agent> ourAgentAround = new HashSet<>();
+                        for (Agent agentOur : ourAgentFree) {
+                            if (((agentOur.x - 3 < ourAgentShoot.x) && (agentOur.x + 3 > ourAgentShoot.x) &&
+                                    (agentOur.y - 3 < ourAgentShoot.y) && (agentOur.y + 3 > ourAgentShoot.y))) {
+                                ourAgentAround.add(agentOur);
+                            }
+                        }
+                        int xMax = ourAgentAround.stream().max(Comparator.comparing(Agent::getX)).get().x;
+                        int yMax = ourAgentAround.stream().max(Comparator.comparing(Agent::getY)).get().y;
+                        int xMin = ourAgentAround.stream().min(Comparator.comparing(Agent::getX)).get().x;
+                        int yMin = ourAgentAround.stream().min(Comparator.comparing(Agent::getY)).get().y;
+                        int xMean = Math.round((xMax + xMin) / 2);
+                        int yMean = Math.round((yMax + yMin) / 2);
+
+                        String throwAction = "";
+                        if (agent.splashBombs > 0 && distanceOurAgentShoot > 1) {
+                            moveAction = "; MOVE " + xMean + " " + yMean;
+
+                            double distance = Distance(xMean, yMean, agent.x, agent.y);
+                            boolean isBomb = distance > 2 && distance < 5;
+
+                            if (isBomb) {
+                                System.err.println("Bomb (" + xMean + "," + yMean + ")");
+                                throwAction = ";THROW " + xMean + " " + yMean;
+                                shootAction = "";
+                            }
+
+                        } else if (distanceOurAgentShoot > 1) {
+                            Pos posourAgentShoot = getPosATK(ourAgentShoot.x, ourAgentShoot.y, width, height);
+                            moveAction = "; MOVE " + posourAgentShoot.x + " " + posourAgentShoot.y;
+                            shootAction = "; SHOOT " + ourAgentShoot.agentId;
+                        }
+
+                        System.out.println(agent.agentId + moveAction + shootAction + throwAction);
                     } else {
                         System.out.println(agent.agentId + "; MOVE " + x + " " + y);
                     }
@@ -137,6 +182,32 @@ class Player {
 
     static public double sqr(double a) {
         return a * a;
+    }
+
+    static public Pos getPos(int x, int y, int width, int height) {
+        if (x > 0 && x < width / 2) {
+            x--;
+        } else if (x < width) {
+            x++;
+        } else if (y > 0 && y < height / 2) {
+            y--;
+        } else if (y < height) {
+            y++;
+        }
+        return new Pos(x, y);
+    }
+
+    static public Pos getPosATK(int x, int y, int width, int height) {
+        if (x > 0 && x < width / 2) {
+            x++;
+        } else if (x < width) {
+            x--;
+        } else if (y > 0 && y < height / 2) {
+            y++;
+        } else if (y < height) {
+            y--;
+        }
+        return new Pos(x, y);
     }
 
     static public double Distance(double x1, double y1, double x2, double y2) {
@@ -175,6 +246,14 @@ class Agent {
         this.splashBombs = splashBombs;
     }
 
+    public Integer getX() {
+        return x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
     @Override
     public String toString() {
         return "Agent{" +
@@ -188,4 +267,5 @@ class Agent {
                 ", y=" + y +
                 '}';
     }
+
 }
