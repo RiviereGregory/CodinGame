@@ -118,7 +118,7 @@ class Player {
                         System.err.println("ourAgentNotFree : " + ourAgentNotFree.size() + " ourAgentsLive : " + ourAgentsLive.size());
                         System.err.println("ourAgentFree : " + ourAgentFree.size() + " ourAgentsLive : " + ourAgentsLive.size());
 
-                        Agent ourAgentShoot = ourAgentFree.stream().min(Comparator.comparing(element -> Distance(element.x, element.y, agent.x, agent.y))).get();
+                        Agent ourAgentShoot = ourAgentFree.stream().min(Comparator.comparing(element -> Distance(element.x, element.y, agent.x, agent.y))).orElse(ourAgentsLive.get(0));
                         System.err.println("ourAgentShoot " + ourAgentShoot);
 
                         double distanceOurAgentShoot = Distance(ourAgentShoot.x, ourAgentShoot.y, agent.x, agent.y);
@@ -131,12 +131,17 @@ class Player {
                                 ourAgentAround.add(agentOur);
                             }
                         }
-                        int xMax = ourAgentAround.stream().max(Comparator.comparing(Agent::getX)).get().x;
-                        int yMax = ourAgentAround.stream().max(Comparator.comparing(Agent::getY)).get().y;
-                        int xMin = ourAgentAround.stream().min(Comparator.comparing(Agent::getX)).get().x;
-                        int yMin = ourAgentAround.stream().min(Comparator.comparing(Agent::getY)).get().y;
-                        int xMean = Math.round((xMax + xMin) / 2);
-                        int yMean = Math.round((yMax + yMin) / 2);
+
+                        int xMean = ourAgentShoot.x;
+                        int yMean = ourAgentShoot.y;
+                        if (!ourAgentAround.isEmpty()) {
+                            int xMax = ourAgentAround.stream().max(Comparator.comparing(Agent::getX)).get().x;
+                            int yMax = ourAgentAround.stream().max(Comparator.comparing(Agent::getY)).get().y;
+                            int xMin = ourAgentAround.stream().min(Comparator.comparing(Agent::getX)).get().x;
+                            int yMin = ourAgentAround.stream().min(Comparator.comparing(Agent::getY)).get().y;
+                            xMean = Math.round((xMax + xMin) / 2);
+                            yMean = Math.round((yMax + yMin) / 2);
+                        }
 
                         String throwAction = "";
                         if (agent.splashBombs > 0 && distanceOurAgentShoot > 1) {
@@ -151,9 +156,8 @@ class Player {
                                 shootAction = "";
                             }
 
-                        } else if (distanceOurAgentShoot > 1) {
-                            Pos posourAgentShoot = getPosATK(ourAgentShoot.x, ourAgentShoot.y, width, height);
-                            moveAction = "; MOVE " + posourAgentShoot.x + " " + posourAgentShoot.y;
+                        } else {
+                            moveAction = "; MOVE " + ourAgentShoot.x + " " + ourAgentShoot.y;
                             shootAction = "; SHOOT " + ourAgentShoot.agentId;
                         }
 
@@ -194,19 +198,8 @@ class Player {
         } else if (y < height) {
             y++;
         }
-        return new Pos(x, y);
-    }
-
-    static public Pos getPosATK(int x, int y, int width, int height) {
-        if (x > 0 && x < width / 2) {
-            x++;
-        } else if (x < width) {
-            x--;
-        } else if (y > 0 && y < height / 2) {
-            y++;
-        } else if (y < height) {
-            y--;
-        }
+        x = (x > 0) ? ((x < width) ? x : 0) : 0;
+        y = (y > 0) ? ((y < width) ? x : 0) : 0;
         return new Pos(x, y);
     }
 
